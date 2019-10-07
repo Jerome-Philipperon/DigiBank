@@ -10,7 +10,7 @@ namespace DomainModel
         [Key]
         public int PersonId { get; set; }
         [Required]
-        public string FisrtName { get; set; }
+        public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
 

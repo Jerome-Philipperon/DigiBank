@@ -18,6 +18,7 @@ namespace DomainModel
         [DataType(DataType.DateTime)]
         public DateTime ExpirationDate { get; set; }
 
+        public Client CardOwner { get; set; }
 
     }
 }
