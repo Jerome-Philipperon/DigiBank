@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace DomainModel
@@ -10,11 +9,12 @@ namespace DomainModel
     {
         [Key]
         public int PersonId { get; set; }
-        [NotNull]
+        [Required]
         public string FisrtName { get; set; }
-        [NotNull]
+        [Required]
         public string LastName { get; set; }
 
+        [Required]
         [DataType(DataType.DateTime)]
         public DateTime DateOfBirth { get; set; }
     }

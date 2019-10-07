@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace DomainModel
 {
     public class Employee : Person
     {
-        [NotNull]
+        [Required]
         public string OfficeName { get; set; }
-        [NotNull]
+        [Required]
         public bool IsJunior { get; set; }
         public Manager MyManager{ get; set; }
     }
