@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DAL
+namespace DomainModel
 {
     internal class DateTypeAttribute : Attribute
     {
