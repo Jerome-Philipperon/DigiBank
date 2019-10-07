@@ -18,6 +18,7 @@ namespace DAL
         static BankContext()
         {
             //Database.SetInitializer(new SchoolInitializer());
+            //yolo a supprimer
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
