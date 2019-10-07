@@ -8,8 +8,6 @@ namespace DomainModel
 {
     public class Card
     {
-
-  
         public string NetworkIssuer { get; set; }
 
         [StringLength(16)]
@@ -19,10 +17,6 @@ namespace DomainModel
 
         [DataType(DataType.DateTime)]
         public DateTime ExpirationDate { get; set; }
-
-
-
-
 
 
     }
