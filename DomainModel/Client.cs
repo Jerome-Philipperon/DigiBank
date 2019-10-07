@@ -14,7 +14,7 @@ namespace DomainModel
         [Required]
         public string City { get; set; }
 
-        public Employee MyEmployees { get; set; }
+        public Employee MyEmployee { get; set; }
         
         public ICollection<Deposit> MyDeposits { get; set; }
         public ICollection<Saving> MySavings { get; set; }
