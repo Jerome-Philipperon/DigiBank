@@ -15,12 +15,6 @@ namespace DAL
         public DbSet<Saving> Savings { get; set; }
         public DbSet<Card> Cards { get; set; }
 
-        static BankContext()
-        {
-            //Database.SetInitializer(new SchoolInitializer());
-            //yolo a supprimer
-        }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Data Source=.\SQLEXPRESS;Initial Catalog= BankDb; Integrated Security=True");
