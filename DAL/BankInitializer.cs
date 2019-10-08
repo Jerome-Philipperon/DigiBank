@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL
 {
-    static class BankInitializer
+    public static class BankInitializer
     {
 
         public static void Initialization(this BankContext context, bool dataCreateAlways)
@@ -17,7 +17,7 @@ namespace DAL
 
             context.Database.EnsureCreated();
 
-            if (!context.Clients.Any())
+            if (context.Clients.Any())
                 return;
 
             #region Managers
