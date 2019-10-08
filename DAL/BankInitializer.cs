@@ -166,7 +166,7 @@ namespace DAL
                     InterestRate = 1.5,
                 },
             };
-            context.Savings.AddRange(savings);
+            context.Accounts.AddRange(savings);
             #endregion
 
             #region Deposits
@@ -238,7 +238,7 @@ namespace DAL
                     //DepositCards = {cards[0]},
                 },
             };
-            context.Deposits.AddRange(deposits);
+            context.Accounts.AddRange(deposits);
             #endregion
 
             #region Cards
