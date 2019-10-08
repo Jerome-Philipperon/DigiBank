@@ -16,6 +16,7 @@ namespace DomainModel
 
         [Required]
         [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}",ApplyFormatInEditMode = true)]
         public DateTime DateOfBirth { get; set; }
     }
 }

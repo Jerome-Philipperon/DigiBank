@@ -9,7 +9,11 @@ namespace DAL
 {
     public static class BankInitializer
     {
-
+        /// <summary>
+        /// Initializer and choose if drop create always
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="dataCreateAlways">want create always or not</param>
         public static void Initialization(this BankContext context, bool dataCreateAlways)
         {
             if (dataCreateAlways)
@@ -27,7 +31,7 @@ namespace DAL
                 {
                     FirstName = "Loth",
                     LastName = "Dorcanie",
-                    DateOfBirth = new DateTime(30/04/1970),
+                    DateOfBirth = new DateTime(1970,04,30),
                     OfficeName = "Lyon 2",
                     IsJunior = false,
                     //MyEmployees = {employees[0], employees[1], employees[2]},
@@ -43,7 +47,7 @@ namespace DAL
                 {
                     FirstName = "Venec",
                     LastName = "Bandit",
-                    DateOfBirth = new DateTime(15/07/1987),
+                    DateOfBirth = new DateTime(1987,07,15),
                     OfficeName = "Lyon 2",
                     IsJunior = false,
                     MyManager = managers[0],
@@ -52,7 +56,7 @@ namespace DAL
                 {
                     FirstName = "Attila",
                     LastName = "Chefdeshuns",
-                    DateOfBirth = new DateTime(19/06/1996),
+                    DateOfBirth = new DateTime(1996,06,19),
                     OfficeName = "Lyon 2",
                     IsJunior = true,
                     MyManager = managers[0],
@@ -61,7 +65,7 @@ namespace DAL
                 {
                     FirstName = "Blaise",
                     LastName = "Cure",
-                    DateOfBirth = new DateTime(15/08/1973),
+                    DateOfBirth = new DateTime(1973,08,15),
                     OfficeName = "Lyon 2",
                     IsJunior = false,
                     MyManager = managers[0],
@@ -76,8 +80,8 @@ namespace DAL
                 new Client
                 {
                     FirstName = "Arthur",
-                    LastName = "Roidebretagne",
-                    DateOfBirth = new DateTime(15/08/1963),
+                    LastName = "Pendragon",
+                    DateOfBirth = new DateTime(1963,08,15),
                     Street = "15 Rue des Alizés",
                     ZipCode = "68100",
                     City = "Mulhouse",
@@ -88,7 +92,7 @@ namespace DAL
                 {
                     FirstName = "Lancelot",
                     LastName = "Dulac",
-                    DateOfBirth = new DateTime(08/03/1986),
+                    DateOfBirth = new DateTime(1986,03,08),
                     Street = "168 avenue Charles de Gaulle",
                     ZipCode = "59000",
                     City = "Lille",
@@ -99,7 +103,7 @@ namespace DAL
                 {
                     FirstName = "Guenièvre",
                     LastName = "Reinedebretagne",
-                    DateOfBirth = new DateTime(09/10/1995),
+                    DateOfBirth = new DateTime(1995,10,09),
                     Street = "5 impasse des lilas",
                     ZipCode = "69001",
                     City = "Lyon",
@@ -110,7 +114,7 @@ namespace DAL
                 {
                     FirstName = "Perceval",
                     LastName = "Legallois",
-                    DateOfBirth = new DateTime(16/02/1948),
+                    DateOfBirth = new DateTime(1948,02,16),
                     Street = "259 cours Benjamin Franklin",
                     ZipCode = "06200",
                     City = "Nice",
@@ -121,7 +125,7 @@ namespace DAL
                 {
                     FirstName = "Karadoc",
                     LastName = "Devannes",
-                    DateOfBirth = new DateTime(03/11/1956),
+                    DateOfBirth = new DateTime(1956,03,03),
                     Street = "39 rue de Marignan",
                     ZipCode = "45100",
                     City = "Blois",
@@ -149,7 +153,7 @@ namespace DAL
                     MinimumAmount = 300,
                     MaximumAmount = 2000,
                     InterestRate = 1.5,
-                    MaximumDate = new DateTime(01/01/2025),
+                    MaximumDate = new DateTime(2025,01,01),
                 },
                 new Saving
                 {
@@ -177,35 +181,35 @@ namespace DAL
                     NetworkIssuer = "Visa",
                     CardNumber = "4109429309081349",
                     SecurityCode = "8996",
-                    ExpirationDate = new DateTime(31/08/2021),
+                    ExpirationDate = new DateTime(2021,08,31),
                 },
                 new Card
                 {
                     NetworkIssuer = "Mastercard",
                     CardNumber = "5896124367815623",
                     SecurityCode = "1664",
-                    ExpirationDate = new DateTime(30/04/2022),
+                    ExpirationDate = new DateTime(2022,04,30),
                 },
                 new Card
                 {
                     NetworkIssuer = "Amex",
                     CardNumber = "8974014163969462",
                     SecurityCode = "1128",
-                    ExpirationDate = new DateTime(31/07/2020),
+                    ExpirationDate = new DateTime(2020,07,31),
                 },
                 new Card
                 {
                     NetworkIssuer = "Visa",
                     CardNumber = "4109795164846232",
                     SecurityCode = "4856",
-                    ExpirationDate = new DateTime(31/10/2021),
+                    ExpirationDate = new DateTime(2021,10,31),
                 },
                 new Card
                 {
                     NetworkIssuer = "Visa",
                     CardNumber = "4109636346596301",
                     SecurityCode = "0509",
-                    ExpirationDate = new DateTime(31/12/2021),
+                    ExpirationDate = new DateTime(2021,12,31),
                 },
             };
             context.Cards.AddRange(cards);
@@ -225,7 +229,7 @@ namespace DAL
                     BIC = "D46FQ13452A",
                     Balance = 23.55M,
                     AccountOwner = clients[1],
-                    CreationDate = new DateTime(05/08/1999),
+                    CreationDate = new DateTime(1999,08,05),
                     AutorizedOverdraft = 1000,
                     FreeOverdraft = 50,
                     OverdraftChargeRate = 5.00M,
@@ -242,7 +246,7 @@ namespace DAL
                     BIC = "DQ4589FG19P",
                     Balance = 618.98M,
                     AccountOwner = clients[2],
-                    CreationDate = new DateTime(13/12/2018),
+                    CreationDate = new DateTime(2018,12,13),
                     AutorizedOverdraft = 500,
                     OverdraftChargeRate = 5.00M,
                     DepositCards = new List<Card> {cards[2]},
@@ -258,7 +262,7 @@ namespace DAL
                     BIC = "PM7954ER23F",
                     Balance = 992.10M,
                     AccountOwner = clients[3],
-                    CreationDate = new DateTime(24/04/2013),
+                    CreationDate = new DateTime(2013,04,24),
                     AutorizedOverdraft = 200,
                     OverdraftChargeRate = 5.00M,
                     DepositCards = new List<Card> {cards[1]},
@@ -274,7 +278,7 @@ namespace DAL
                     BIC = "JM4682DS12Q",
                     Balance = 111.11M,
                     AccountOwner = clients[4],
-                    CreationDate = new DateTime(14/01/2015),
+                    CreationDate = new DateTime(2015,01,14),
                     AutorizedOverdraft = 500,
                     OverdraftChargeRate = 5.00M,
                     DepositCards = new List<Card> { cards[0] },
