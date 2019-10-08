@@ -8,6 +8,7 @@ namespace DomainModel
 {
     public abstract class Account
     {
+        [Key]
         public int AccountId { get; set; }
         [StringLength(5)]
         [Required]
