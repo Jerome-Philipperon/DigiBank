@@ -11,8 +11,9 @@ namespace DAL
         public DbSet<Client> Clients { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Manager> Managers { get; set; }
-        //public DbSet<Deposit> Deposits { get; set; }
-        //public DbSet<Saving> Savings { get; set; }
+        public DbSet<Person> People { get; set; }
+        public DbSet<Deposit> Deposits { get; set; }
+        public DbSet<Saving> Savings { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Card> Cards { get; set; }
 

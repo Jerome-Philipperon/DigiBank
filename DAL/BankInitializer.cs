@@ -166,79 +166,7 @@ namespace DAL
                     InterestRate = 1.5,
                 },
             };
-            context.Accounts.AddRange(savings);
-            #endregion
-
-            #region Deposits
-            var deposits = new List<Deposit>()
-            {
-                new Deposit
-                {
-                    BankCode = "75692",
-                    BranchCode = "13467",
-                    AccountNumber = "93445624525",
-                    Key = "99",
-                    BBAN = "75692134679344562452599",
-                    IBAN = "FR7675692134679344562452599",
-                    BIC = "D46FQ13452A",
-                    Balance = 23.55M,
-                    AccountOwner = clients[1],
-                    CreationDate = new DateTime(05/08/1999),
-                    AutorizedOverdraft = 1000,
-                    FreeOverdraft = 50,
-                    OverdraftChargeRate = 5.00M,
-                    //DepositCards = {cards[3], cards[4]},
-                },
-                new Deposit
-                {
-                    BankCode = "19753",
-                    BranchCode = "64987",
-                    AccountNumber = "15648535665",
-                    Key = "78",
-                    BBAN = "19753649871564853566578",
-                    IBAN = "FR7619753649871564853566578",
-                    BIC = "DQ4589FG19P",
-                    Balance = 618.98M,
-                    AccountOwner = clients[2],
-                    CreationDate = new DateTime(13/12/2018),
-                    AutorizedOverdraft = 500,
-                    OverdraftChargeRate = 5.00M,
-                    //DepositCards = {cards[2]},
-                },
-                new Deposit
-                {
-                    BankCode = "98135",
-                    BranchCode = "46215",
-                    AccountNumber = "94534561234",
-                    Key = "16",
-                    BBAN = "98135462159453456123416",
-                    IBAN = "FR7698135462159453456123416",
-                    BIC = "PM7954ER23F",
-                    Balance = 992.10M,
-                    AccountOwner = clients[3],
-                    CreationDate = new DateTime(24/04/2013),
-                    AutorizedOverdraft = 200,
-                    OverdraftChargeRate = 5.00M,
-                    //DepositCards = {cards[1]},
-                },
-                new Deposit
-                {
-                    BankCode = "79256",
-                    BranchCode = "13456",
-                    AccountNumber = "49756324561",
-                    Key = "46",
-                    BBAN = "79256134564975632456146",
-                    IBAN = "FR7679256134564975632456146",
-                    BIC = "JM4682DS12Q",
-                    Balance = 111.11M,
-                    AccountOwner = clients[4],
-                    CreationDate = new DateTime(14/01/2015),
-                    AutorizedOverdraft = 500,
-                    OverdraftChargeRate = 5.00M,
-                    //DepositCards = {cards[0]},
-                },
-            };
-            context.Accounts.AddRange(deposits);
+            context.Savings.AddRange(savings);
             #endregion
 
             #region Cards
@@ -281,6 +209,78 @@ namespace DAL
                 },
             };
             context.Cards.AddRange(cards);
+            #endregion
+
+            #region Deposits
+            var deposits = new List<Deposit>()
+            {
+                new Deposit
+                {
+                    BankCode = "75692",
+                    BranchCode = "13467",
+                    AccountNumber = "93445624525",
+                    Key = "99",
+                    BBAN = "75692134679344562452599",
+                    IBAN = "FR7675692134679344562452599",
+                    BIC = "D46FQ13452A",
+                    Balance = 23.55M,
+                    AccountOwner = clients[1],
+                    CreationDate = new DateTime(05/08/1999),
+                    AutorizedOverdraft = 1000,
+                    FreeOverdraft = 50,
+                    OverdraftChargeRate = 5.00M,
+                    DepositCards = new List<Card> {cards[3], cards[4]},
+                },
+                new Deposit
+                {
+                    BankCode = "19753",
+                    BranchCode = "64987",
+                    AccountNumber = "15648535665",
+                    Key = "78",
+                    BBAN = "19753649871564853566578",
+                    IBAN = "FR7619753649871564853566578",
+                    BIC = "DQ4589FG19P",
+                    Balance = 618.98M,
+                    AccountOwner = clients[2],
+                    CreationDate = new DateTime(13/12/2018),
+                    AutorizedOverdraft = 500,
+                    OverdraftChargeRate = 5.00M,
+                    DepositCards = new List<Card> {cards[2]},
+                },
+                new Deposit
+                {
+                    BankCode = "98135",
+                    BranchCode = "46215",
+                    AccountNumber = "94534561234",
+                    Key = "16",
+                    BBAN = "98135462159453456123416",
+                    IBAN = "FR7698135462159453456123416",
+                    BIC = "PM7954ER23F",
+                    Balance = 992.10M,
+                    AccountOwner = clients[3],
+                    CreationDate = new DateTime(24/04/2013),
+                    AutorizedOverdraft = 200,
+                    OverdraftChargeRate = 5.00M,
+                    DepositCards = new List<Card> {cards[1]},
+                },
+                new Deposit
+                {
+                    BankCode = "79256",
+                    BranchCode = "13456",
+                    AccountNumber = "49756324561",
+                    Key = "46",
+                    BBAN = "79256134564975632456146",
+                    IBAN = "FR7679256134564975632456146",
+                    BIC = "JM4682DS12Q",
+                    Balance = 111.11M,
+                    AccountOwner = clients[4],
+                    CreationDate = new DateTime(14/01/2015),
+                    AutorizedOverdraft = 500,
+                    OverdraftChargeRate = 5.00M,
+                    DepositCards = new List<Card> { cards[0] },
+                },
+            };
+            context.Deposits.AddRange(deposits);
             #endregion
 
             context.SaveChanges();
