@@ -8,6 +8,8 @@ namespace DomainModel
 {
     public class Card
     {
+        [Key]
+        public int CardId { get; set; }
         public string NetworkIssuer { get; set; }
 
         [StringLength(16)]
