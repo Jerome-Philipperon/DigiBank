@@ -22,7 +22,32 @@ namespace DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Client>().ToTable("Clients", "BCR");
+            modelBuilder.Entity<Employee>().ToTable("Employees", "BCR");
+            modelBuilder.Entity<Manager>().ToTable("Managers", "BCR");
+            modelBuilder.Entity<Deposit>().ToTable("Deposits", "CB");
+            modelBuilder.Entity<Saving>().ToTable("Savings", "CB");
+            modelBuilder.Entity<Card>().ToTable("Cards", "CB");
 
+            modelBuilder.Entity<Client>()
+                .HasOne(c => c.MyEmployee)
+                .WithMany(e => e.MyClients);
+
+            modelBuilder.Entity<Client>()
+                .HasMany(c => c.MyAccounts)
+                .WithOne(a => a.AccountOwner)
+                .IsRequired(false);
+
+            modelBuilder.Entity<Manager>()
+                .HasMany(m => m.MyEmployees)
+                .WithOne(e => e.MyManager);
+
+            modelBuilder.Entity<Card>()
+                .HasOne(c => c.CardDeposit);
+
+            modelBuilder.Entity<Deposit>()
+                .HasMany(d => d.DepositCards)
+                .IsRequired(false);
 
             base.OnModelCreating(modelBuilder);
         }

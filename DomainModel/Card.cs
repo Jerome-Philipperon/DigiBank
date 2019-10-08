@@ -1,5 +1,4 @@
-﻿using DAL;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -18,7 +17,7 @@ namespace DomainModel
         [DataType(DataType.DateTime)]
         public DateTime ExpirationDate { get; set; }
 
-        public Client CardOwner { get; set; }
+        public Deposit CardDeposit { get; set; }
 
     }
 }
