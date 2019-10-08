@@ -54,7 +54,7 @@ namespace WebAppManagement.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AccountId,BankCode,BranchCode,AccountNumber,Key,BBAN,IBAN,BIC,Balance")] Account account)
+        public async Task<IActionResult> Create([Bind("AccountId,BankCode,BranchCode,AccountNumber,Key,BBAN,IBAN,BIC,Balance,CreationDate,AutorizedOverdraft,OverdraftChargeRate")] Deposit account)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace WebAppManagement.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AccountId,BankCode,BranchCode,AccountNumber,Key,BBAN,IBAN,BIC,Balance")] Account account)
+        public async Task<IActionResult> Edit(int id, [Bind("AccountId,BankCode,BranchCode,AccountNumber,Key,BBAN,IBAN,BIC,Balance,CreationDate,AutorizedOverdraft,OverdraftChargeRate")] Deposit account)
         {
             if (id != account.AccountId)
             {
