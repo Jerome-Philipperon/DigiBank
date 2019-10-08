@@ -22,7 +22,27 @@ namespace DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Person>().ToTable("People", "BCR");
+            modelBuilder.Entity<Account>().ToTable("Accounts", "CB");
+            modelBuilder.Entity<Card>().ToTable("Cards", "CB");
 
+            modelBuilder.Entity<Client>()
+                .HasOne(c => c.MyEmployee)
+                .WithMany(e => e.MyClients);
+
+            modelBuilder.Entity<Client>()
+                .HasMany(c => c.MyAccounts)
+                .WithOne(a => a.AccountOwner)
+                .IsRequired(false);
+
+            modelBuilder.Entity<Manager>()
+                .HasMany(m => m.MyEmployees)
+                .WithOne(e => e.MyManager);
+
+            modelBuilder.Entity<Card>()
+                .HasOne(c => c.CardDeposit)
+                .WithMany(d => d.DepositCards)
+                .IsRequired(false);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -12,5 +12,6 @@ namespace DomainModel
         [Required]
         public bool IsJunior { get; set; }
         public Manager MyManager{ get; set; }
+        public List<Client> MyClients { get; set; }
     }
 }
