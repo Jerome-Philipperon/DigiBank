@@ -21,14 +21,14 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Savings
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Savings.ToListAsync());
         }
 
         // GET: Savings/Details/5
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -47,7 +47,7 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Savings/Create
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         public IActionResult Create()
         {
             return View();
@@ -56,7 +56,7 @@ namespace WebAppManagement.Controllers
         // POST: Savings/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AccountId,BankCode,BranchCode,AccountNumber,Key,BBAN,IBAN,BIC,Balance,MinimumAmount,InterestRate")] Saving account)
@@ -71,7 +71,7 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Savings/Edit/5
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,7 +90,7 @@ namespace WebAppManagement.Controllers
         // POST: Savings/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("AccountId,BankCode,BranchCode,AccountNumber,Key,BBAN,IBAN,BIC,Balance,MinimumAmount,InterestRate")] Saving account)
@@ -124,7 +124,7 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Savings/Delete/5
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -143,7 +143,7 @@ namespace WebAppManagement.Controllers
         }
 
         // POST: Savings/Delete/5
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

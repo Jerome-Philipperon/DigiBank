@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DomainModel;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL
@@ -36,7 +38,23 @@ namespace DAL
                     IsJunior = false,
                     //MyEmployees = {employees[0], employees[1], employees[2]},
                 },
+                new Manager
+                {
+                    FirstName = "Leodagan",
+                    LastName = "De Carmelide",
+                    DateOfBirth = new DateTime(1968,07,22),
+                    OfficeName = "Lyon 2",
+                    IsJunior = true,
+                    //MyEmployees = {employees[0], employees[1], employees[2]},
+                },
             };
+
+            //Todo tentative d'implementation des password a suppr ou si on trouve
+            //UserStore<Manager> store = new UserStore<Manager>(context);
+            //store.CreateAsync(managers.First());
+
+            //UserManager<Manager> userManager = new UserManager<Manager>(store, null, null, null);
+            
             context.Managers.AddRange(managers);
             #endregion
 
@@ -68,7 +86,7 @@ namespace DAL
                     DateOfBirth = new DateTime(1973,08,15),
                     OfficeName = "Lyon 2",
                     IsJunior = false,
-                    MyManager = managers[0],
+                    MyManager = managers[1],
                 },
             };
             context.Employees.AddRange(employees);

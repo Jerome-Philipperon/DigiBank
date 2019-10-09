@@ -21,14 +21,14 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Deposits
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Deposits.ToListAsync());
         }
 
         // GET: Deposits/Details/5
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -47,7 +47,7 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Deposits/Create
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         public IActionResult Create()
         {
             return View();
@@ -56,7 +56,7 @@ namespace WebAppManagement.Controllers
         // POST: Deposits/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AccountId,BankCode,BranchCode,AccountNumber,Key,BBAN,IBAN,BIC,Balance,CreationDate,AutorizedOverdraft,OverdraftChargeRate")] Deposit account)
@@ -71,7 +71,7 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Deposits/Edit/5
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,7 +90,7 @@ namespace WebAppManagement.Controllers
         // POST: Deposits/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("AccountId,BankCode,BranchCode,AccountNumber,Key,BBAN,IBAN,BIC,Balance,CreationDate,AutorizedOverdraft,OverdraftChargeRate")] Deposit account)
@@ -124,7 +124,7 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Deposits/Delete/5
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -143,7 +143,7 @@ namespace WebAppManagement.Controllers
         }
 
         // POST: Deposits/Delete/5
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

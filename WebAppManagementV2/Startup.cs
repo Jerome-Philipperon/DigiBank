@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using DAL;
+using DomainModel;
 
 namespace WebAppManagementV2
 {
@@ -33,6 +34,7 @@ namespace WebAppManagementV2
                 options.UseSqlServer(
                     Configuration.GetConnectionString("MyConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<BankContext>();
             services.AddControllersWithViews();
             services.AddScoped<BankContext>();

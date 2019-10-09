@@ -21,15 +21,15 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Managers
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Managers.ToListAsync());
         }
 
         // GET: Managers/Details/5
-        [Authorize]
-        public async Task<IActionResult> Details(int? id)
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
@@ -37,7 +37,7 @@ namespace WebAppManagement.Controllers
             }
 
             var person = await _context.Managers
-                .FirstOrDefaultAsync(m => m.PersonId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (person == null)
             {
                 return NotFound();
@@ -47,7 +47,7 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Managers/Create
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         public IActionResult Create()
         {
             return View();
@@ -56,7 +56,7 @@ namespace WebAppManagement.Controllers
         // POST: Managers/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PersonId,FirstName,LastName,DateOfBirth,OfficeName,IsJunior")] Manager person)
@@ -71,7 +71,7 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Managers/Edit/5
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,12 +90,12 @@ namespace WebAppManagement.Controllers
         // POST: Managers/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PersonId,FirstName,LastName,DateOfBirth,OfficeName,IsJunior")] Manager person)
+        public async Task<IActionResult> Edit(string id, [Bind("PersonId,FirstName,LastName,DateOfBirth,OfficeName,IsJunior")] Manager person)
         {
-            if (id != person.PersonId)
+            if (id != person.Id)
             {
                 return NotFound();
             }
@@ -109,7 +109,7 @@ namespace WebAppManagement.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PersonExists(person.PersonId))
+                    if (!PersonExists(person.Id))
                     {
                         return NotFound();
                     }
@@ -124,8 +124,8 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Managers/Delete/5
-        [Authorize]
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
             {
@@ -133,7 +133,7 @@ namespace WebAppManagement.Controllers
             }
 
             var person = await _context.Managers
-                .FirstOrDefaultAsync(m => m.PersonId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (person == null)
             {
                 return NotFound();
@@ -143,10 +143,10 @@ namespace WebAppManagement.Controllers
         }
 
         // POST: Managers/Delete/5
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var person = await _context.Managers.FindAsync(id);
             _context.Managers.Remove(person);
@@ -154,9 +154,9 @@ namespace WebAppManagement.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PersonExists(int id)
+        private bool PersonExists(string id)
         {
-            return _context.Managers.Any(e => e.PersonId == id);
+            return _context.Managers.Any(e => e.Id == id);
         }
     }
 }

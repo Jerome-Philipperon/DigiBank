@@ -21,15 +21,16 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Employees
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Employees.ToListAsync());
+            //return View(await _context.Employees.Where(e => e.MyManager.PersonId == (Person)this.User.PersonId).ToListAsync());
         }
 
         // GET: Employees/Details/5
-        [Authorize]
-        public async Task<IActionResult> Details(int? id)
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
@@ -37,7 +38,7 @@ namespace WebAppManagement.Controllers
             }
 
             var person = await _context.Employees
-                .FirstOrDefaultAsync(m => m.PersonId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (person == null)
             {
                 return NotFound();
@@ -47,7 +48,7 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Employees/Create
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         public IActionResult Create()
         {
             return View();
@@ -56,7 +57,7 @@ namespace WebAppManagement.Controllers
         // POST: Employees/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PersonId,FirstName,LastName,DateOfBirth,OfficeName,IsJunior")] Employee person)
@@ -71,7 +72,7 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Employees/Edit/5
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,12 +91,12 @@ namespace WebAppManagement.Controllers
         // POST: Employees/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PersonId,FirstName,LastName,DateOfBirth,OfficeName,IsJunior")] Employee person)
+        public async Task<IActionResult> Edit(string id, [Bind("PersonId,FirstName,LastName,DateOfBirth,OfficeName,IsJunior")] Employee person)
         {
-            if (id != person.PersonId)
+            if (id != person.Id)
             {
                 return NotFound();
             }
@@ -109,7 +110,7 @@ namespace WebAppManagement.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PersonExists(person.PersonId))
+                    if (!PersonExists(person.Id))
                     {
                         return NotFound();
                     }
@@ -124,8 +125,8 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Employees/Delete/5
-        [Authorize]
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
             {
@@ -133,7 +134,7 @@ namespace WebAppManagement.Controllers
             }
 
             var person = await _context.Employees
-                .FirstOrDefaultAsync(m => m.PersonId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (person == null)
             {
                 return NotFound();
@@ -143,10 +144,10 @@ namespace WebAppManagement.Controllers
         }
 
         // POST: Employees/Delete/5
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var person = await _context.Employees.FindAsync(id);
             _context.Employees.Remove(person);
@@ -154,9 +155,9 @@ namespace WebAppManagement.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PersonExists(int id)
+        private bool PersonExists(string id)
         {
-            return _context.Employees.Any(e => e.PersonId == id);
+            return _context.Employees.Any(e => e.Id == id);
         }
     }
 }

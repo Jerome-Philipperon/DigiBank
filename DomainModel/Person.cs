@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace DomainModel
 {
-    public abstract class Person
+    public abstract class Person : IdentityUser
     {
-        [Key]
-        public int PersonId { get; set; }
+        //[Key]
+        //public int PersonId { get; set; }
         [Required]
         public string FirstName { get; set; }
         [Required]
