@@ -18,9 +18,22 @@ namespace DAL
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Card> Cards { get; set; }
 
+        public BankContext()
+            : base()
+        {
+
+        }
+
+        public BankContext(DbContextOptions options)
+            : base(options)
+        {
+
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=.\SQLEXPRESS;Initial Catalog= BankDb; Integrated Security=True");
+            //optionsBuilder.UseSqlServer(@"Data Source=.\SQLEXPRESS;Initial Catalog= BankDb; Integrated Security=True");
+            base.OnConfiguring(optionsBuilder);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
