@@ -16,7 +16,7 @@ namespace DomainModel
         public string LastName { get; set; }
 
         [Required]
-        [DataType(DataType.DateTime)]
+        [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}",ApplyFormatInEditMode = true)]
         public DateTime DateOfBirth { get; set; }
     }

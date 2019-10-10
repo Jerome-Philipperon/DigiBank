@@ -48,7 +48,7 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Employees/Create
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         public IActionResult Create()
         {
             return View();

@@ -32,13 +32,12 @@ namespace DAL
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=.\SQLEXPRESS;Initial Catalog= BankDb; Integrated Security=True"); //For Consol app
+            //optionsBuilder.UseSqlServer(@"Data Source=.\SQLEXPRESS;Initial Catalog= BankDb; Integrated Security=True"); //For Consol app
             base.OnConfiguring(optionsBuilder);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<Person>().ToTable("People", "BCR");
             modelBuilder.Entity<Account>().ToTable("Accounts", "CB");
             modelBuilder.Entity<Card>().ToTable("Cards", "CB");
 
