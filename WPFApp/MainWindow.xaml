@@ -31,17 +31,13 @@
                     </StackPanel>
                 </DockPanel>
                 <DockPanel x:Name="Statistiques" Visibility="Visible">
-                    <TextBlock>
-                        Le nombre de clients de la banque <LineBreak/>
-                        Le nombre de clients par manager <LineBreak/>
-                        Les sommes épargnées par les clients de la banque <LineBreak/>
-                        Les sommes épargnées par les clients par manager <LineBreak/>
-                        Le solde total de l’ensemble des comptes de la banque <LineBreak/>
-                        Le pourcentage de clients qui possèdent une carte bancaire <LineBreak/>
-                        Le pourcentage de clients qui possèdent une carte bancaire par manager <LineBreak/>
-                        Le pourcentage de clients qui possèdent un compte d’épargne <LineBreak/>
-                        Le pourcentage de clients qui possèdent un compte d’épargne par manager
-                    </TextBlock>
+                    <ScrollViewer Margin="20">
+                        <TextBlock x:Name="Body"  Height="auto"
+                                   ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                                   ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            Chargement ...
+                        </TextBlock>
+                    </ScrollViewer>
                 </DockPanel>
             </StackPanel>
             
