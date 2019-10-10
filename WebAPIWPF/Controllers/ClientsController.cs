@@ -30,7 +30,7 @@ namespace WebAPIWPF.Controllers
 
         // GET: api/Clients/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Client>> GetClient(int id)
+        public async Task<ActionResult<Client>> GetClient(string id)
         {
             var client = await _context.Clients.FindAsync(id);
 
