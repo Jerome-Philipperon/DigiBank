@@ -59,7 +59,7 @@ namespace WebAPIWPF.Controllers
             {
                 _context.Clients.ToList();
                 var nbClientParManager = 0;
-                var ListEmployeesParManager = _context.Employees.Where(emp => emp.MyManager.PersonId == manager.PersonId).ToList();
+                var ListEmployeesParManager = _context.Employees.Where(emp => emp.MyManager.Id == manager.Id).ToList();
                 foreach (var employee in ListEmployeesParManager)
                 {
                     nbClientParManager += employee.MyClients.Count();
@@ -96,7 +96,7 @@ namespace WebAPIWPF.Controllers
             foreach (var manager in _context.Managers.ToList())
             {
                 decimal epargneParManager = 0M;
-                var ListEmployeesParManager = _context.Employees.Where(emp => emp.MyManager.PersonId == manager.PersonId).ToList();
+                var ListEmployeesParManager = _context.Employees.Where(emp => emp.MyManager.Id == manager.Id).ToList();
                 foreach (var employee in ListEmployeesParManager)
                 {
                     _context.Clients.ToList();
@@ -157,11 +157,11 @@ namespace WebAPIWPF.Controllers
         public List<List<string>> GetPercentageOfCustomersWhoHaveCreditCardByManager()
         {
             List<List<string>> pourcentageParManager = new List<List<string>>();
-            int nbCardParManager = 0;
             foreach (var manager in _context.Managers.ToList())
             {
+                int nbCardParManager = 0;
                 int nbClientsByManager = 0;
-                var ListEmployeesParManager = _context.Employees.Where(emp => emp.MyManager.PersonId == manager.PersonId).ToList();
+                var ListEmployeesParManager = _context.Employees.Where(emp => emp.MyManager.Id == manager.Id).ToList();
                 foreach (var employee in ListEmployeesParManager)
                 {
                     _context.Clients.ToList();
@@ -210,7 +210,7 @@ namespace WebAPIWPF.Controllers
             foreach (var manager in _context.Managers.ToList())
             {
                 int nbClientsByManager = 0;
-                var ListEmployeesParManager = _context.Employees.Where(emp => emp.MyManager.PersonId == manager.PersonId).ToList();
+                var ListEmployeesParManager = _context.Employees.Where(emp => emp.MyManager.Id == manager.Id).ToList();
                 int nbSavingByManager = 0;
                 foreach (var employee in ListEmployeesParManager)
                 {
@@ -242,7 +242,7 @@ namespace WebAPIWPF.Controllers
             foreach (var manager in _context.Managers.ToList())
             {
                 var nbClientParManager = 0;
-                var ListEmployeesParManager = _context.Employees.Where(emp => emp.MyManager.PersonId == manager.PersonId).ToList();
+                var ListEmployeesParManager = _context.Employees.Where(emp => emp.MyManager.Id == manager.Id).ToList();
                 foreach (var employee in ListEmployeesParManager)
                 {
                     nbClientParManager += employee.MyClients.Count();
@@ -267,7 +267,7 @@ namespace WebAPIWPF.Controllers
             foreach (var manager in _context.Managers.ToList())
             {
                 decimal epargneParManager = 0M;
-                var ListEmployeesParManager = _context.Employees.Where(emp => emp.MyManager.PersonId == manager.PersonId).ToList();
+                var ListEmployeesParManager = _context.Employees.Where(emp => emp.MyManager.Id == manager.Id).ToList();
                 foreach (var employee in ListEmployeesParManager)
                 {
                     foreach (var client in employee.MyClients.ToList())
@@ -317,11 +317,12 @@ namespace WebAPIWPF.Controllers
             result.Add($" pourcentage de clients qui possèdent une carte bancaire : {pourcentage}%");
 
             //Le pourcentage de clients qui possèdent une carte bancaire par manager 
-            int nbCardParManager = 0;
+            
             foreach (var manager in _context.Managers.ToList())
             {
+                int nbCardParManager = 0;
                 int nbClientsByManager = 0;
-                var ListEmployeesParManager = _context.Employees.Where(emp => emp.MyManager.PersonId == manager.PersonId).ToList();
+                var ListEmployeesParManager = _context.Employees.Where(emp => emp.MyManager.Id == manager.Id).ToList();
                 foreach (var employee in ListEmployeesParManager)
                 {
                     nbClientsByManager += employee.MyClients.ToList().Count();
@@ -362,7 +363,7 @@ namespace WebAPIWPF.Controllers
             foreach (var manager in _context.Managers.ToList())
             {
                 int nbClientsByManager = 0;
-                var ListEmployeesParManager = _context.Employees.Where(emp => emp.MyManager.PersonId == manager.PersonId).ToList();
+                var ListEmployeesParManager = _context.Employees.Where(emp => emp.MyManager.Id == manager.Id).ToList();
                 int nbSavingByManager = 0;
                 foreach (var employee in ListEmployeesParManager)
                 {
