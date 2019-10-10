@@ -305,6 +305,17 @@ namespace DAL
             context.Deposits.AddRange(deposits);
             #endregion
 
+            #region Roles
+            string[] roles = new string[] { "Manager", "Employee", "Client"};
+            foreach (var role in roles)
+            {
+                if(!context.Roles.Any(r => r.Name == role))
+                {
+                    context.Roles.Add(new IdentityRole(role));
+                }
+            }
+            #endregion
+
             context.SaveChanges();
         }
     }
