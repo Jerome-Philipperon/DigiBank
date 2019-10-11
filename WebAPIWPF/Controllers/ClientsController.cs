@@ -236,6 +236,7 @@ namespace WebAPIWPF.Controllers
         [HttpGet("Info")]
         public List<string> GetInfo()
         {
+            _context.Clients.ToList().Count();
             List<string> result = new List<string>();
             // nombre de client 
             result.Add("nombre de client : " + _context.Clients.ToList().Count());
