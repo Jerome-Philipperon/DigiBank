@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFApp"
+        xmlns:converters="clr-namespace:WPFApp.Converters"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <Grid x:Name="GridWindow">
         <DockPanel>
 
             <Menu DockPanel.Dock="Top">
@@ -16,28 +17,32 @@
             </Menu>
 
             <StackPanel DockPanel.Dock="Top" Height="50" Orientation="Horizontal" >
-                <Button Style="{StaticResource OngletButton}" Click="AffichageInfoClient" Content="Info Client"></Button>
-                <Button Style="{StaticResource OngletButton}" Click="AffichageStatistiques">Statistiques</Button>
+                <Button Style="{StaticResource OngletButton}" 
+                        Click="AffichageInfoClient" Content="Info Client"></Button>
+                <Button Style="{StaticResource OngletButton}" 
+                        Click="AffichageStatistiques">Statistiques</Button>
             </StackPanel>
 
             <StackPanel>
 
-                <DockPanel x:Name="Info_Client" Visibility="Collapsed" >
-                    <StackPanel DockPanel.Dock="Left" Width="200">
-                        <Button >Nom Client</Button>
+                <DockPanel x:Name="Info_Client" Visibility="Visible" >
+                    <StackPanel DockPanel.Dock="Top" x:Name="ListClient">
+                        
                     </StackPanel>
-                    <StackPanel>
-                        <Button>Info Client</Button>
+                    <StackPanel x:Name="DetailClient">
+                        
                     </StackPanel>
                 </DockPanel>
-                <DockPanel x:Name="Statistiques" Visibility="Visible">
-                    <ScrollViewer Margin="20">
-                        <TextBlock x:Name="Body"  Height="auto"
-                                   ScrollViewer.VerticalScrollBarVisibility="Auto" 
-                                   ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                            Chargement ...
-                        </TextBlock>
-                    </ScrollViewer>
+                <DockPanel x:Name="Statistiques" Visibility="Collapsed">
+                    <Grid x:Name="StatistiqueBody" Height="{Binding Path=ActualHeight, ElementName=GridWindow, Converter={converters:Converter}, ConverterParameter='100'}" Margin="20">
+                        <ScrollViewer>
+                            <TextBlock x:Name="Body" 
+                                       ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                                       ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                Chargement ...
+                            </TextBlock>
+                        </ScrollViewer>
+                    </Grid>
                 </DockPanel>
             </StackPanel>
             
