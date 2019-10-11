@@ -149,7 +149,7 @@ namespace WebAPIWPF.Controllers
                     }
                 }
             }
-            return ((double)nbCard / (double)_context.Clients.Count()) * 100D;
+            return Math.Round(((double)nbCard / (double)_context.Clients.Count()) * 100D,2);
         }
 
         //Le pourcentage de clients qui possèdent une carte bancaire par manager 
@@ -181,7 +181,7 @@ namespace WebAPIWPF.Controllers
                         }
                     }
                 }
-                pourcentageParManager.Add(new List<string> { $"{manager.FirstName} {manager.LastName}", (((double)nbCardParManager / (double)nbClientsByManager) * 100D).ToString() });
+                pourcentageParManager.Add(new List<string> { $"{manager.FirstName} {manager.LastName}", (Math.Round(((double)nbCardParManager / (double)nbClientsByManager) * 100D,2)).ToString() });
             }
             return pourcentageParManager;
         }
@@ -199,7 +199,7 @@ namespace WebAPIWPF.Controllers
                     nbSaving++;
                 }
             }
-            return ((double)nbSaving / (double)_context.Clients.Count()) * 100D;
+            return Math.Round(((double)nbSaving / (double)_context.Clients.Count()) * 100D,2);
         }
 
         //Le pourcentage de clients qui possèdent un compte d’épargne par manager
@@ -225,10 +225,12 @@ namespace WebAPIWPF.Controllers
                         }
                     }
                 }
-                result.Add(new List<string> { $"{manager.FirstName} {manager.LastName}", (((double)nbSavingByManager / (double)nbClientsByManager) * 100D).ToString() });
+                result.Add(new List<string> { $"{manager.FirstName} {manager.LastName}", (Math.Round(((double)nbSavingByManager / (double)nbClientsByManager) * 100D,2)).ToString() });
             }
             return result;
         }
+
+        #region Info Dev
 
 
         [HttpGet("Info")]
@@ -293,7 +295,7 @@ namespace WebAPIWPF.Controllers
             {
                 soldeTotal += deposit.Balance;
             }
-            result.Add($"Le solde total de l’ensemble des comptes de la banque est de {soldeTotal}");
+            result.Add($"Le solde total de l’ensemble des comptes de la banque est de {Math.Round(soldeTotal,2)}");
 
 
             //Le pourcentage de clients qui possèdent une carte bancaire
@@ -342,7 +344,7 @@ namespace WebAPIWPF.Controllers
                     }
                 }
                 double pourcentageParManager = ((double)nbCardParManager / (double)nbClientsByManager) * 100D;
-                result.Add($" pourcentage de clients qui possèdent une carte bancaire par manager : {pourcentageParManager}%");
+                result.Add($" pourcentage de clients qui possèdent une carte bancaire par manager : {Math.Round(pourcentageParManager, 2)}%");
             }
 
 
@@ -356,7 +358,7 @@ namespace WebAPIWPF.Controllers
                     nbSaving++;
                 }
             }
-            result.Add($"pourcentage de clients qui possèdent un compte d’épargne : {((double)nbSaving / (double)_context.Clients.Count()) * 100D   }%");
+            result.Add($"pourcentage de clients qui possèdent un compte d’épargne : {Math.Round(((double)nbSaving / (double)_context.Clients.Count()) * 100D,2)}%");
 
             //Le pourcentage de clients qui possèdent un compte d’épargne par manager
 
@@ -377,7 +379,7 @@ namespace WebAPIWPF.Controllers
                         }
                     }
                 }
-               result.Add($"pourcentage de clients qui possèdent un compte d’épargne par manager : {((double)nbSavingByManager / (double)nbClientsByManager) * 100D   }%");
+               result.Add($"pourcentage de clients qui possèdent un compte d’épargne par manager : {Math.Round(((double)nbSavingByManager / (double)nbClientsByManager) * 100D,2)}%");
             }
 
 
@@ -450,5 +452,7 @@ namespace WebAPIWPF.Controllers
             return _context.Clients.Any(e => e.PersonId == id);
         }
         */
+
+        #endregion
     }
 }

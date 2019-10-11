@@ -15,32 +15,96 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using DAL;
-using DomainModel;
 using System.IO;
 using System.Runtime.Serialization.Json;
+using System.Globalization;
+using System.Windows.Markup;
+
+
+namespace WPFApp.Converters
+{
+    public partial class Converter : MarkupExtension, IValueConverter
+    {
+        private static Converter _instance;
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            double result = Double.Parse(value.ToString()) - Double.Parse(parameter.ToString());// * System.Convert.ToDouble(parameter);
+            //MessageBox(result);
+            return result;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override object ProvideValue(IServiceProvider serviceProvider)
+        {
+            return _instance ?? (_instance = new Converter());
+        }
+    }
+}
 
 namespace WPFApp
 {
+    
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
         static readonly HttpClient client = new HttpClient();
-
-        
-
         public MainWindow()
         {
             InitializeComponent();
-            Connection();
+            GetAndInitializeListClients();
+            GetAndInitializeOngletStatistique();
+
+        }
+
+
+        private async void GetAndInitializeListClients()
+        {
+            HttpResponseMessage responseHTTP;
+            string responseBody;
+            List<Client> Clients;
+            
+            try
+            {
+                responseHTTP = await client.GetAsync("https://localhost:44326/api/clients");
+                responseHTTP.EnsureSuccessStatusCode();
+                responseBody = await responseHTTP.Content.ReadAsStringAsync();
+                Clients = Client.Parse(responseBody);
+
+                ComboBox comboBox = new ComboBox();
+                for (int i = 0; i < Clients.Count(); i++)
+                {
+                    ComboBoxItem Item = new ComboBoxItem();
+                    Item.Content = $"Mme, Mr {Clients[i].FirstName} {Clients[i].LastName}";
+                    Item.DataContext = Clients[i].ClientId;
+                    comboBox.Items.Add(Item);
+                    
+                }
+                ComboBoxItem comboBoxItem = new ComboBoxItem();
+                comboBoxItem.Content = "-- Select Client--";
+                comboBoxItem.IsEnabled = false;
+                comboBox.Items.Add(comboBoxItem);
+                comboBox.SelectedItem = comboBoxItem;
+
+                comboBox.SelectionChanged += Details;
+                ListClient.Children.Add(comboBox);
+            }
+            catch (HttpRequestException e)
+            {
+                Body.Text = "\nException Caught!";
+                Body.Text += "Message :{0} " + e.Message;
+            }
         }
 
         /// <summary>
         /// Récuparation des donnés de la wabAPI et initialisation des donnés dans l'application
         /// </summary>
-        private async void Connection()
+        private async void GetAndInitializeOngletStatistique()
         {
             //Variables
             HttpResponseMessage responseHTTP;
@@ -140,12 +204,18 @@ namespace WPFApp
             }
         }
 
+        /// <summary>
+        /// Affichage de l'onglet info clients 
+        /// </summary>
         private void AffichageInfoClient(object sender, RoutedEventArgs e)
         {
             Info_Client.Visibility = Visibility.Visible;
             Statistiques.Visibility = Visibility.Collapsed;
         }
 
+        /// <summary>
+        /// Affichage de l'onglet statistique 
+        /// </summary>
         private void AffichageStatistiques(object sender, RoutedEventArgs e)
         {
             Statistiques.Visibility = Visibility.Visible;
@@ -159,12 +229,50 @@ namespace WPFApp
         /// <returns> List<List<string>> </returns>
         public static List<List<string>> ReadToObject(string json)
         {
-            var deserializedUser = new List<List<string>>();
+            var deserialized = new List<List<string>>();
             var ms = new MemoryStream(Encoding.UTF8.GetBytes(json));
-            var ser = new DataContractJsonSerializer(deserializedUser.GetType());
-            deserializedUser = ser.ReadObject(ms) as List<List<string>>;
+            var ser = new DataContractJsonSerializer(deserialized.GetType());
+            deserialized = ser.ReadObject(ms) as List<List<string>>;
             ms.Close();
-            return deserializedUser;
+            return deserialized;
+        }
+
+        /// <summary>
+        /// Affichage du details du client 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void Details(object sender, RoutedEventArgs e)
+        {
+            HttpResponseMessage responseHTTP;
+            string responseBody;
+            Client currentClient;
+            try
+            {
+                DetailClient.Children.Clear();
+                var comboBox = (ComboBox)sender;
+                var item = (ComboBoxItem)comboBox.SelectedItem;
+
+                responseHTTP = await client.GetAsync("https://localhost:44326/api/clients/"+ item.DataContext.ToString());
+                responseHTTP.EnsureSuccessStatusCode();
+                responseBody = await responseHTTP.Content.ReadAsStringAsync();
+                //MessageBox.Show(responseBody);
+                currentClient = Client.ParseClient(responseBody);
+                TextBlock textBlock = new TextBlock();
+                textBlock.Text = $"Nom : {currentClient.LastName} {Environment.NewLine}";
+                textBlock.Text += $"Prénom : {currentClient.FirstName} {Environment.NewLine}";
+                textBlock.Text += $"Date de Naissance : {currentClient.DateOfBirth} {Environment.NewLine}";
+                textBlock.Text += $"Address : {currentClient.Street} {Environment.NewLine}";
+                textBlock.Text += $"Code Postal : {currentClient.ZipCode} {Environment.NewLine}";
+                textBlock.Text += $"Ville : {currentClient.City} {Environment.NewLine}";
+                DetailClient.Children.Add(textBlock);
+            }
+            catch (HttpRequestException exception)
+            {
+                Body.Text = "\nException Caught!";
+                Body.Text += "Message :{0} " + exception.Message;
+            }
+            
         }
     }
 }
