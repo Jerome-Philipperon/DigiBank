@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using DAL;
 using DomainModel;
+using WebBackAdmin.Binders;
 
 namespace WebAppManagementV2
 {
@@ -29,6 +30,10 @@ namespace WebAppManagementV2
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc(config =>
+            {
+                config.ModelBinderProviders[4] = new FloatingTypeModelBinderProvider();
+            });
             services.AddDbContext<BankContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("MyConnection")));

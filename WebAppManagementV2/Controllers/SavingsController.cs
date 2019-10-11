@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using DAL;
 using DomainModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Globalization;
 
 namespace WebAppManagement.Controllers
 {
@@ -79,7 +81,7 @@ namespace WebAppManagement.Controllers
                 return NotFound();
             }
 
-            var account = await _context.Savings.FindAsync(id);
+            var account = await _context.Savings.Include(a => a.AccountOwner).SingleOrDefaultAsync(a => a.AccountId == id);
             if (account == null)
             {
                 return NotFound();
@@ -99,6 +101,8 @@ namespace WebAppManagement.Controllers
             {
                 return NotFound();
             }
+
+            ModelState.Remove("AccountOwner");
 
             if (ModelState.IsValid)
             {
