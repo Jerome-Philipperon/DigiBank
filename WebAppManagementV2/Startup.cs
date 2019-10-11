@@ -40,6 +40,9 @@ namespace WebAppManagementV2
             services.AddDefaultIdentity<Employee>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<BankContext>();
+            services.AddIdentityCore<Manager>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<BankContext>();
             services.AddControllersWithViews();
             services.AddScoped<BankContext>();
             services.AddRazorPages();
