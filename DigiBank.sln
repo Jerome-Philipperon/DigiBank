@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "ConsoleApp\Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPIWPF", "WebAPIWPF\WebAPIWPF.csproj", "{69E68827-C04D-4EAC-B0D0-539B8003473A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAppManagementV2", "WebAppManagementV2\WebAppManagementV2.csproj", "{EA115BE1-E173-4456-966E-70358F8E87AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAppManagementV2", "WebAppManagementV2\WebAppManagementV2.csproj", "{EA115BE1-E173-4456-966E-70358F8E87AC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
