@@ -72,7 +72,7 @@ namespace WebAppManagement.Controllers
 
         // GET: Managers/Edit/5
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
             {

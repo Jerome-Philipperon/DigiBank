@@ -27,6 +27,7 @@ namespace DAL
                 return;
 
             #region Managers
+
             var managers = new List<Manager>()
             {
                 new Manager
@@ -37,6 +38,14 @@ namespace DAL
                     OfficeName = "Lyon 2",
                     IsJunior = false,
                     //MyEmployees = {employees[0], employees[1], employees[2]},
+                    Email = "loth@orcanie.com",
+                    NormalizedEmail = "LOTH@ORCANIE.COM",
+                    UserName = "DarkLothXXPutschXX",
+                    NormalizedUserName = "DARKLOTHXXPUTSCHXX",
+                    PhoneNumber = "0625856741",
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    SecurityStamp = Guid.NewGuid().ToString("D")
                 },
                 new Manager
                 {
@@ -46,15 +55,27 @@ namespace DAL
                     OfficeName = "Lyon 2",
                     IsJunior = true,
                     //MyEmployees = {employees[0], employees[1], employees[2]},
+                    Email = "leodagan@carmelide.com",
+                    NormalizedEmail = "LEODAGAN@CARMELIDE.COM",
+                    UserName = "POGNON",
+                    NormalizedUserName = "POGNON",
+                    PhoneNumber = "0624586523",
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    SecurityStamp = Guid.NewGuid().ToString("D")
                 },
-            };
-
-            //Todo tentative d'implementation des password a suppr ou si on trouve
-            //UserStore<Manager> store = new UserStore<Manager>(context);
-            //store.CreateAsync(managers.First());
-
-            //UserManager<Manager> userManager = new UserManager<Manager>(store, null, null, null);
+            }; 
             
+            foreach (var manager in managers)
+            {
+                var password = new PasswordHasher<Manager>();
+                var hashed = password.HashPassword(manager, "P4$$word");
+                manager.PasswordHash = hashed;
+
+                var userStore = new UserStore<Manager>(context);
+                var result = userStore.CreateAsync(manager);
+            }
+
             context.Managers.AddRange(managers);
             #endregion
 

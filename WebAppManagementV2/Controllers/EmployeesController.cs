@@ -48,7 +48,7 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Employees/Create
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         public IActionResult Create()
         {
             return View();
@@ -73,7 +73,7 @@ namespace WebAppManagement.Controllers
 
         // GET: Employees/Edit/5
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
             {
