@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using DAL;
 using DomainModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -24,13 +25,16 @@ namespace WebAppManagementV2.Areas.Identity.Pages.Account
         private readonly UserManager<Employee> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly BankContext bc;
 
         public RegisterModel(
             UserManager<Employee> userManager,
             SignInManager<Employee> signInManager,
+            BankContext bc, 
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
+            this.bc = bc;
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
@@ -71,6 +75,10 @@ namespace WebAppManagementV2.Areas.Identity.Pages.Account
             [Display(Name = "Is Junior")]
             public bool IsJunior { get; set; }
 
+            [DataType(DataType.Text)]
+            [Display(Name = "Manager name")]
+            public string ManagerName { get; set; }
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
@@ -100,6 +108,7 @@ namespace WebAppManagementV2.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                Manager managerId = bc.Managers.SingleOrDefault(m => m.LastName == Input.ManagerName);
                 //todo ajouter les variables 2
                 var user = new Employee
                 {
@@ -108,10 +117,13 @@ namespace WebAppManagementV2.Areas.Identity.Pages.Account
                     DateOfBirth = Input.DOB,
                     OfficeName = Input.OfficeName,
                     IsJunior = Input.IsJunior,
+                    MyManager = managerId,
                     UserName = Input.Email, 
                     Email = Input.Email 
                 };
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
