@@ -102,16 +102,7 @@ namespace WebAppManagement.Controllers
                 return NotFound();
             }
 
-            //if (ModelState.ContainsKey("{AccountOwner}"))
-            //    ModelState["{AccountOwner}"].Errors.Clear();
-
-            foreach (var key in ModelState.Keys)
-            {
-                if (ModelState.IsValid == false)
-                {
-                    ModelState[key].Errors.Clear();
-                }
-            }
+            ModelState.Remove("AccountOwner");
 
             if (ModelState.IsValid)
             {
