@@ -61,6 +61,7 @@ namespace WebAppManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AccountId,BankCode,BranchCode,AccountNumber,Key,BBAN,IBAN,BIC,Balance,CreationDate,AutorizedOverdraft,OverdraftChargeRate")] Deposit account)
         {
+            ModelState.Remove("AccountOwner");
             if (ModelState.IsValid)
             {
                 _context.Add(account);
@@ -99,7 +100,7 @@ namespace WebAppManagement.Controllers
             {
                 return NotFound();
             }
-
+            ModelState.Remove("AccountOwner");
             if (ModelState.IsValid)
             {
                 try

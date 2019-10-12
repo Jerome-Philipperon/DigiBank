@@ -63,6 +63,7 @@ namespace WebAppManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AccountId,BankCode,BranchCode,AccountNumber,Key,BBAN,IBAN,BIC,Balance,MinimumAmount,InterestRate")] Saving account)
         {
+            ModelState.Remove("AccountOwner");
             if (ModelState.IsValid)
             {
                 _context.Add(account);
