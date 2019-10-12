@@ -75,6 +75,10 @@ namespace WebAppManagementV2.Areas.Identity.Pages.Account
             [Display(Name = "Is Junior")]
             public bool IsJunior { get; set; }
 
+            [Required]
+            [Display(Name = "Is Manager")]
+            public bool IsManager { get; set; }
+
             [DataType(DataType.Text)]
             [Display(Name = "Manager name")]
             public string ManagerName { get; set; }
@@ -110,19 +114,38 @@ namespace WebAppManagementV2.Areas.Identity.Pages.Account
             {
                 Manager managerId = bc.Managers.SingleOrDefault(m => m.LastName == Input.ManagerName);
                 //todo ajouter les variables 2
-                var user = new Employee
+                IdentityResult result;
+                var user = new Employee();
+                if (!Input.IsManager)
                 {
-                    FirstName = Input.FirstName,
-                    LastName = Input.LastName,
-                    DateOfBirth = Input.DOB,
-                    OfficeName = Input.OfficeName,
-                    IsJunior = Input.IsJunior,
-                    MyManager = managerId,
-                    UserName = Input.Email, 
-                    Email = Input.Email 
-                };
-
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                    user = new Employee
+                    {
+                        FirstName = Input.FirstName,
+                        LastName = Input.LastName,
+                        DateOfBirth = Input.DOB,
+                        OfficeName = Input.OfficeName,
+                        IsJunior = Input.IsJunior,
+                        MyManager = managerId,
+                        UserName = Input.Email,
+                        Email = Input.Email
+                    };
+                    result = await _userManager.CreateAsync(user, Input.Password);
+                }
+                else
+                {
+                    user = new Manager
+                    {
+                        FirstName = Input.FirstName,
+                        LastName = Input.LastName,
+                        DateOfBirth = Input.DOB,
+                        OfficeName = Input.OfficeName,
+                        IsJunior = Input.IsJunior,
+                        MyManager = managerId,
+                        UserName = Input.Email,
+                        Email = Input.Email
+                    };
+                    result = await _userManager.CreateAsync(user, Input.Password);
+                }
 
                 if (result.Succeeded)
                 {

@@ -24,8 +24,8 @@ namespace WebAppManagement.Controllers
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Employees.ToListAsync());
-            //return View(await _context.Employees.Where(e => e.MyManager.PersonId == (Person)this.User.PersonId).ToListAsync());
+            string personMail = this.User.Identity.Name;
+            return View(await _context.Employees.Where(e => e.MyManager.Email == personMail).ToListAsync());
         }
 
         // GET: Employees/Details/5
@@ -48,7 +48,7 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Employees/Create
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         public IActionResult Create()
         {
             return View();
@@ -64,6 +64,7 @@ namespace WebAppManagement.Controllers
         {
             if (ModelState.IsValid)
             {
+                person.MyManager = _context.Managers.SingleOrDefault(m => m.Email == this.User.Identity.Name);
                 _context.Add(person);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
