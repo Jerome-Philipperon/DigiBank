@@ -10,31 +10,28 @@
     <Grid x:Name="GridWindow">
         <DockPanel>
 
-            <Menu DockPanel.Dock="Top">
-                <MenuItem Header=" _File">
-                    <MenuItem Header="_Exit" ></MenuItem>
+            <Menu DockPanel.Dock="Top" Height="25" >
+                <MenuItem Header=" _File" Height="25"  FontSize="14">
+                    <MenuItem Header="_Exit" Click="Exit"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Info Client" Click="AffichageInfoClient" Height="25"  FontSize="14">
+                </MenuItem>
+                <MenuItem Header="Statistiques" Click="AffichageStatistiques" Height="25"  FontSize="14">
                 </MenuItem>
             </Menu>
-
-            <StackPanel DockPanel.Dock="Top" Height="50" Orientation="Horizontal" >
-                <Button Style="{StaticResource OngletButton}" 
-                        Click="AffichageInfoClient" Content="Info Client"></Button>
-                <Button Style="{StaticResource OngletButton}" 
-                        Click="AffichageStatistiques">Statistiques</Button>
-            </StackPanel>
 
             <StackPanel>
 
                 <DockPanel x:Name="Info_Client" Visibility="Visible" >
                     <StackPanel DockPanel.Dock="Top" x:Name="ListClient">
-                        
+
                     </StackPanel>
                     <StackPanel x:Name="DetailClient">
-                        
+
                     </StackPanel>
                 </DockPanel>
                 <DockPanel x:Name="Statistiques" Visibility="Collapsed">
-                    <Grid x:Name="StatistiqueBody" Height="{Binding Path=ActualHeight, ElementName=GridWindow, Converter={converters:Converter}, ConverterParameter='100'}" Margin="20">
+                    <Grid x:Name="StatistiqueBody" Height="{Binding Path=ActualHeight, ElementName=GridWindow, Converter={converters:Converter}, ConverterParameter='60'}" Margin="20">
                         <ScrollViewer>
                             <TextBlock x:Name="Body" 
                                        ScrollViewer.VerticalScrollBarVisibility="Auto" 
@@ -45,14 +42,6 @@
                     </Grid>
                 </DockPanel>
             </StackPanel>
-            
-            
-    
         </DockPanel>
-        
-        
-        
-        
-
     </Grid>
 </Window>

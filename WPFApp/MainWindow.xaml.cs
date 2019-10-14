@@ -68,7 +68,7 @@ namespace WPFApp
             HttpResponseMessage responseHTTP;
             string responseBody;
             List<Client> Clients;
-            
+
             try
             {
                 responseHTTP = await client.GetAsync("https://localhost:44326/api/clients");
@@ -83,7 +83,7 @@ namespace WPFApp
                     Item.Content = $"Mme, Mr {Clients[i].FirstName} {Clients[i].LastName}";
                     Item.DataContext = Clients[i].ClientId;
                     comboBox.Items.Add(Item);
-                    
+
                 }
                 ComboBoxItem comboBoxItem = new ComboBoxItem();
                 comboBoxItem.Content = "-- Select Client--";
@@ -92,12 +92,13 @@ namespace WPFApp
                 comboBox.SelectedItem = comboBoxItem;
 
                 comboBox.SelectionChanged += Details;
+                comboBox.Margin = new Thickness(10, 10, 10, 0);
                 ListClient.Children.Add(comboBox);
             }
             catch (HttpRequestException e)
             {
-                Body.Text = "\nException Caught!";
-                Body.Text += "Message :{0} " + e.Message;
+                Body.Text = "\nException Caught! \n";
+                Body.Text += "Message : " + e.Message;
             }
         }
 
@@ -253,26 +254,134 @@ namespace WPFApp
                 var comboBox = (ComboBox)sender;
                 var item = (ComboBoxItem)comboBox.SelectedItem;
 
-                responseHTTP = await client.GetAsync("https://localhost:44326/api/clients/"+ item.DataContext.ToString());
+                responseHTTP = await client.GetAsync("https://localhost:44326/api/clients/" + item.DataContext.ToString());
                 responseHTTP.EnsureSuccessStatusCode();
                 responseBody = await responseHTTP.Content.ReadAsStringAsync();
-                //MessageBox.Show(responseBody);
+
                 currentClient = Client.ParseClient(responseBody);
-                TextBlock textBlock = new TextBlock();
-                textBlock.Text = $"Nom : {currentClient.LastName} {Environment.NewLine}";
-                textBlock.Text += $"Prénom : {currentClient.FirstName} {Environment.NewLine}";
-                textBlock.Text += $"Date de Naissance : {currentClient.DateOfBirth} {Environment.NewLine}";
-                textBlock.Text += $"Address : {currentClient.Street} {Environment.NewLine}";
-                textBlock.Text += $"Code Postal : {currentClient.ZipCode} {Environment.NewLine}";
-                textBlock.Text += $"Ville : {currentClient.City} {Environment.NewLine}";
-                DetailClient.Children.Add(textBlock);
+                Grid grid = new Grid();
+                grid.Margin = new Thickness(20);
+                ColumnDefinition column = new ColumnDefinition();
+                column.Width = new GridLength(200);
+                grid.ColumnDefinitions.Add(column);
+                grid.ColumnDefinitions.Add(new ColumnDefinition());
+                for (int i = 0; i < 6; i++)
+                {
+                    grid.RowDefinitions.Add(new RowDefinition());
+                }
+                TextBlock Header1 = new TextBlock();
+                Header1.FontSize = 14;
+                Header1.TextDecorations = TextDecorations.Underline;
+                Header1.FontWeight = FontWeights.Bold;
+                Header1.Text = "Nom : ";
+                Grid.SetRow(Header1, 0);
+                Grid.SetColumn(Header1, 0);
+                grid.Children.Add(Header1);
+
+                TextBlock Header2 = new TextBlock();
+                Header2.FontSize = 14;
+                Header2.TextDecorations = TextDecorations.Underline;
+                Header2.FontWeight = FontWeights.Bold;
+                Header2.Text = "Prénom : ";
+                Grid.SetRow(Header2, 1);
+                Grid.SetColumn(Header2, 0);
+                grid.Children.Add(Header2);
+
+                TextBlock Header3 = new TextBlock();
+                Header3.FontSize = 14;
+                Header3.TextDecorations = TextDecorations.Underline;
+                Header3.FontWeight = FontWeights.Bold;
+                Header3.Text = "Date de Naissance : ";
+                Grid.SetRow(Header3, 2);
+                Grid.SetColumn(Header3, 0);
+                grid.Children.Add(Header3);
+
+                TextBlock Header4 = new TextBlock();
+                Header4.FontSize = 14;
+                Header4.TextDecorations = TextDecorations.Underline;
+                Header4.FontWeight = FontWeights.Bold;
+                Header4.Text = "Address : ";
+                Grid.SetRow(Header4, 3);
+                Grid.SetColumn(Header4, 0);
+                grid.Children.Add(Header4);
+
+                TextBlock Header5 = new TextBlock();
+                Header5.FontSize = 14;
+                Header5.TextDecorations = TextDecorations.Underline;
+                Header5.FontWeight = FontWeights.Bold;
+                Header5.Text = "Code Postal : ";
+                Grid.SetRow(Header5, 4);
+                Grid.SetColumn(Header5, 0);
+                grid.Children.Add(Header5);
+
+                TextBlock Header6 = new TextBlock();
+                Header6.FontSize = 14;
+                Header6.TextDecorations = TextDecorations.Underline;
+                Header6.FontWeight = FontWeights.Bold;
+                Header6.Text = "Ville : ";
+                Grid.SetRow(Header6, 5);
+                Grid.SetColumn(Header6, 0);
+                grid.Children.Add(Header6);
+
+                TextBlock Content1 = new TextBlock();
+                Content1.Text = $"{currentClient.LastName}";
+                Grid.SetRow(Content1, 0);
+                Grid.SetColumn(Content1, 1);
+                grid.Children.Add(Content1);
+
+                TextBlock Content2 = new TextBlock();
+                Content2.Text = $"{currentClient.FirstName}";
+                Grid.SetRow(Content2, 1);
+                Grid.SetColumn(Content2, 1);
+                grid.Children.Add(Content2);
+
+                TextBlock Content3 = new TextBlock();
+                Content3.Text = $"{currentClient.DateOfBirth}";
+                Grid.SetRow(Content3, 2);
+                Grid.SetColumn(Content3, 1);
+                grid.Children.Add(Content3);
+
+                TextBlock Content4 = new TextBlock();
+                Content4.Text = $"{currentClient.Street}";
+                Grid.SetRow(Content4, 3);
+                Grid.SetColumn(Content4, 1);
+                grid.Children.Add(Content4);
+
+                TextBlock Content5 = new TextBlock();
+                Content5.Text = $"{currentClient.ZipCode}";
+                Grid.SetRow(Content5, 4);
+                Grid.SetColumn(Content5, 1);
+                grid.Children.Add(Content5);
+
+                TextBlock Content6 = new TextBlock();
+                Content6.Text = $"{currentClient.City}";
+                Grid.SetRow(Content6, 5);
+                Grid.SetColumn(Content6, 1);
+                grid.Children.Add(Content6);
+
+                DetailClient.Children.Add(grid);
+
+                //TextBlock textBlock = new TextBlock();
+                //textBlock.Margin = new Thickness(10);
+                //textBlock.Text = $"Nom : {currentClient.LastName} {Environment.NewLine}";
+                //textBlock.Text += $"Prénom : {currentClient.FirstName} {Environment.NewLine}";
+                //textBlock.Text += $"Date de Naissance : {currentClient.DateOfBirth} {Environment.NewLine}";
+                //textBlock.Text += $"Address : {currentClient.Street} {Environment.NewLine}";
+                //textBlock.Text += $"Code Postal : {currentClient.ZipCode} {Environment.NewLine}";
+                //textBlock.Text += $"Ville : {currentClient.City} {Environment.NewLine}";
+                //DetailClient.Children.Add(textBlock);
             }
             catch (HttpRequestException exception)
             {
                 Body.Text = "\nException Caught!";
                 Body.Text += "Message :{0} " + exception.Message;
             }
-            
+
+        }
+
+        private void Exit(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }
