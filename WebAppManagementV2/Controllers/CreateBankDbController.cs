@@ -13,15 +13,11 @@ namespace WebAppManagementV2.Controllers
     public class CreateBankDbController : Controller
     {
         private readonly UserManager<Employee> empManager;
-        //private readonly UserManager<Manager> manManager;
-        //private readonly UserManager<Client> clientManager;
         private readonly BankContext bc;
 
-        public CreateBankDbController(UserManager<Employee> empManager/*, UserManager<Manager> manManager, UserManager<Client> clientManager*/, BankContext bc)
+        public CreateBankDbController(UserManager<Employee> empManager, BankContext bc)
         {
              this.empManager = empManager;
-             /*this.manManager = manManager;
-             this.clientManager = clientManager;*/
              this.bc = bc;
         }
 
@@ -36,7 +32,7 @@ namespace WebAppManagementV2.Controllers
             //    return;
 
             #region Managers
-            Employee man1 = new Employee()
+            Employee man1 = new Manager()
             {
                 FirstName = "Loth",
                 LastName = "Dorcanie",
