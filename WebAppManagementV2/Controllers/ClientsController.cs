@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DAL;
 using DomainModel;
 using Microsoft.AspNetCore.Authorization;
+using WebAppManagementV2.Models;
 
 namespace WebAppManagement.Controllers
 {
@@ -50,7 +51,14 @@ namespace WebAppManagement.Controllers
         [Authorize(Roles = "Manager")]
         public IActionResult Create()
         {
-            return View();
+            CreateClientViewModel cC = new CreateClientViewModel();
+            Employee emp = _context.Employees.SingleOrDefault(e => e.Email == this.User.Identity.Name);
+            cC.Employees = new List<Employee>() { emp };
+            if (emp is Employee)
+            {
+                cC.Employees.AddRange(_context.Employees.Where(e => e.MyManager.Id == emp.Id).ToList());
+            }
+            return View(cC);
         }
 
         // POST: Clients/Create
@@ -59,11 +67,11 @@ namespace WebAppManagement.Controllers
         [Authorize(Roles = "Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PersonId,FirstName,LastName,DateOfBirth,Street,ZipCode,City")] Client person)
+        public async Task<IActionResult> Create([Bind("Client.PersonId,Client.FirstName,Client.LastName,Client.DateOfBirth,Client.Street,Client.ZipCode,City,Client.MyEmployee")] CreateClientViewModel person)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(person);
+                _context.Add(person.Client);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -79,12 +87,21 @@ namespace WebAppManagement.Controllers
                 return NotFound();
             }
 
-            var person = await _context.Clients.FindAsync(id);
-            if (person == null)
+            CreateClientViewModel cC = new CreateClientViewModel();
+            cC.Client = await _context.Clients.FindAsync(id);
+
+            if (cC.Client == null)
             {
                 return NotFound();
             }
-            return View(person);
+
+            Employee emp = await _context.Employees.SingleOrDefaultAsync(e => e.Email == this.User.Identity.Name);
+            cC.Employees = new List<Employee>() { emp };
+            if(emp is Employee)
+            {
+                cC.Employees.AddRange(_context.Employees.Where(e => e.MyManager.Id == emp.Id).ToList());
+            }
+            return View(cC);
         }
 
         // POST: Clients/Edit/5
@@ -93,9 +110,9 @@ namespace WebAppManagement.Controllers
         [Authorize(Roles = "Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PersonId,FirstName,LastName,DateOfBirth,Street,ZipCode,City")] Client person)
+        public async Task<IActionResult> Edit(int id, [Bind("Client.PersonId,Client.FirstName,Client.LastName,Client.DateOfBirth,Client.Street,Client.ZipCode,City,Client.MyEmployee")] CreateClientViewModel person)
         {
-            if (id.ToString() != person.Id)
+            if (id.ToString() != person.Client.Id)
             {
                 return NotFound();
             }
@@ -109,7 +126,7 @@ namespace WebAppManagement.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PersonExists(person.Id))
+                    if (!PersonExists(person.Client.Id))
                     {
                         return NotFound();
                     }
