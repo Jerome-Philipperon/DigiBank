@@ -21,16 +21,22 @@ namespace WebAPIWPF.Controllers
             _context = context;
         }
 
-        // GET: api/Clients
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Client>>> GetClients()
+        public async Task<ActionResult<List<WebTransferClients>>> GetClients()
         {
-            return await _context.Clients.ToListAsync();
+            List<Client> cls = await _context.Clients.ToListAsync();
+            List<WebTransferClients> clients = new List<WebTransferClients>();
+            foreach (Client client in cls)
+            {
+                clients.Add(new WebTransferClients(client.Id, client.FirstName, client.LastName, client.DateOfBirth, client.Street, client.ZipCode, client.City));
+            }
+
+            return clients;
         }
 
         // GET: api/Clients/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Client>> GetClient(string id)
+        public async Task<ActionResult<WebTransferClients>> GetClient(string id)
         {
             var client = await _context.Clients.FindAsync(id);
 
@@ -39,7 +45,7 @@ namespace WebAPIWPF.Controllers
                 return NotFound();
             }
 
-            return client;
+            return new WebTransferClients(client.Id, client.FirstName, client.LastName, client.DateOfBirth, client.Street, client.ZipCode, client.City);
         }
 
         // GET: api/Clients/NbClient
