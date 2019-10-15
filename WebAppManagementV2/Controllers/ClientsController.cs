@@ -67,15 +67,18 @@ namespace WebAppManagement.Controllers
         [Authorize(Roles = "Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Client.PersonId,Client.FirstName,Client.LastName,Client.DateOfBirth,Client.Street,Client.ZipCode,City,Client.MyEmployee")] CreateClientViewModel person)
+        public async Task<IActionResult> Create([Bind("Client,IdSelected")] CreateClientViewModel person)
         {
             if (ModelState.IsValid)
             {
+                Employee emp = _context.Employees.Find(person.IdSelected);
+                person.Client.MyEmployee = emp;
+
                 _context.Add(person.Client);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(person);
+            return View(person.Client);
         }
 
         // GET: Clients/Edit/5
@@ -88,7 +91,7 @@ namespace WebAppManagement.Controllers
             }
 
             CreateClientViewModel cC = new CreateClientViewModel();
-            cC.Client = await _context.Clients.FindAsync(id);
+            cC.Client = await _context.Clients.Include("MyEmployee").SingleOrDefaultAsync(c => c.Id == id);
 
             if (cC.Client == null)
             {
@@ -97,6 +100,7 @@ namespace WebAppManagement.Controllers
 
             Employee emp = await _context.Employees.SingleOrDefaultAsync(e => e.Email == this.User.Identity.Name);
             cC.Employees = new List<Employee>() { emp };
+            cC.IdSelected = cC.Client.MyEmployee.Id;
             if(emp is Employee)
             {
                 cC.Employees.AddRange(_context.Employees.Where(e => e.MyManager.Id == emp.Id).ToList());
@@ -110,7 +114,7 @@ namespace WebAppManagement.Controllers
         [Authorize(Roles = "Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Client.PersonId,Client.FirstName,Client.LastName,Client.DateOfBirth,Client.Street,Client.ZipCode,City,Client.MyEmployee")] CreateClientViewModel person)
+        public async Task<IActionResult> Edit(string id, [Bind("Client,IdSelected")] CreateClientViewModel person)
         {
             if (id.ToString() != person.Client.Id)
             {
@@ -121,7 +125,12 @@ namespace WebAppManagement.Controllers
             {
                 try
                 {
-                    _context.Update(person);
+                    Employee emp = await _context.Employees.FindAsync(person.IdSelected);
+                    person.Client.MyEmployee = emp;
+
+                    Client emps = _context.Clients.Find(id);
+                    _context.Entry(emps).CurrentValues.SetValues(person.Client);
+                    emps.MyEmployee = emp;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -163,7 +172,7 @@ namespace WebAppManagement.Controllers
         [Authorize(Roles = "Manager")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var person = await _context.Clients.FindAsync(id);
             _context.Clients.Remove(person);

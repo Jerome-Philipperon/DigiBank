@@ -1,4 +1,4 @@
-﻿@model DomainModel.Client
+﻿@model CreateClientViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -12,36 +12,53 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Client.Id" />
             <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
+                <label asp-for="Client.FirstName" class="control-label"></label>
+                <input asp-for="Client.FirstName" class="form-control" />
+                <span asp-validation-for="Client.FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
+                <label asp-for="Client.LastName" class="control-label"></label>
+                <input asp-for="Client.LastName" class="form-control" />
+                <span asp-validation-for="Client.LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DateOfBirth" class="control-label"></label>
-                <input asp-for="DateOfBirth" class="form-control" />
-                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                <label asp-for="Client.DateOfBirth" class="control-label"></label>
+                <input asp-for="Client.DateOfBirth" asp-format="{0:yyyy-MM-dd}" class="form-control" />
+                <span asp-validation-for="Client.DateOfBirth" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Street" class="control-label"></label>
-                <input asp-for="Street" class="form-control" />
-                <span asp-validation-for="Street" class="text-danger"></span>
+                <label asp-for="Client.Street" class="control-label"></label>
+                <input asp-for="Client.Street" class="form-control" />
+                <span asp-validation-for="Client.Street" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ZipCode" class="control-label"></label>
-                <input asp-for="ZipCode" class="form-control" />
-                <span asp-validation-for="ZipCode" class="text-danger"></span>
+                <label asp-for="Client.ZipCode" class="control-label"></label>
+                <input asp-for="Client.ZipCode" class="form-control" />
+                <span asp-validation-for="Client.ZipCode" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="City" class="control-label"></label>
-                <input asp-for="City" class="form-control" />
-                <span asp-validation-for="City" class="text-danger"></span>
+                <label asp-for="Client.City" class="control-label"></label>
+                <input asp-for="Client.City" class="form-control" />
+                <span asp-validation-for="Client.City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Employees" class="control-label"></label>
+                <select asp-for="IdSelected" class="form-control">
+                    @foreach (var emp in Model.Employees)
+                    {
+                        if (Model.IdSelected == emp.Id)
+                        {
+                            <option selected="selected" value="@emp.Id">@emp.LastName</option>
+                        }
+                        else
+                        {
+                            <option value="@emp.Id">@emp.LastName</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="Employees" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
