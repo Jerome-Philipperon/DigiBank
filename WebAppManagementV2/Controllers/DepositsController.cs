@@ -159,5 +159,43 @@ namespace WebAppManagement.Controllers
         {
             return _context.Deposits.Any(e => e.AccountId == id);
         }
+
+        // GET: Cards/Create
+        [Authorize(Roles = "Manager")]
+        public IActionResult CreateNewCard(int? id)
+        {
+            //var account = _context.Deposits.Find(id);
+            //ViewBag.idaccount = id;
+            return View();
+        }
+
+        // POST: Cards/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Manager")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateNewCard([Bind("CardId,NetworkIssuer,CardNumber,SecurityCode,ExpirationDate")] Card card, int? id)
+        {
+            var account = await _context.Deposits
+               .FirstOrDefaultAsync(m => m.AccountId == id);
+            if (account == null)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                _context.Cards.Add(card);
+                if (account.DepositCards==null)
+                {
+                    account.DepositCards = new List<Card>();
+                }
+                account.DepositCards.Add(card);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Details", "Deposits", new { id = account.AccountId });//TODO : Référence au Deposit en cours pour que la redirection fonctionne correctement
+            }
+            //
+            return View(card);
+        }
     }
 }

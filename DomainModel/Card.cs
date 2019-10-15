@@ -16,7 +16,8 @@ namespace DomainModel
         [StringLength(4)]
         public string SecurityCode { get; set; }
 
-        [DataType(DataType.DateTime)]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime ExpirationDate { get; set; }
 
         public Deposit CardDeposit { get; set; }

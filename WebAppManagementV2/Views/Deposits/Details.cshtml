@@ -58,9 +58,21 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Balance)
         </dd>
+        <dt class="col-sm-2">
+
+
+            @Html.DisplayNameFor(model => model.DepositCards)
+
+        </dt>
+        <dd class="col-sm-10">
+
+            @Html.DisplayFor(model => model.DepositCards)
+
+
+        </dd>
     </dl>
     <p>
-        <a asp-action="Create" asp-area="" asp-controller="Cards">Create New Card</a>
+        <a asp-action="CreateNewCard" asp-area="" asp-controller="Deposits" asp-route-id="@Model.AccountId">Create New Card</a>
     </p>
 </div>
 <div>
