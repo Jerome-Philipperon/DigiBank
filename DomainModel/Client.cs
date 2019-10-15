@@ -13,7 +13,6 @@ namespace DomainModel
         public string ZipCode { get; set; }
         [Required]
         public string City { get; set; }
-
         public Employee MyEmployee { get; set; }
         
         public ICollection<Account> MyAccounts { get; set; }
