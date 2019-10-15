@@ -40,6 +40,22 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.IsJunior)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MyManager)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MyManager.LastName)
+        </dd>
+        @for (int i = 0; i < Model.MyClients.Count; i++)
+        {
+            <dt class="col-sm-2">
+                Client @(i + 1) :
+            </dt>
+            <dd class="col-sm-10">
+                @{string url = "https://localhost:44308/Clients/Details/" + Model.MyClients[i].Id;}
+                <a href=@url>@Html.DisplayFor(model => model.MyClients[i].LastName) @Html.DisplayFor(model => model.MyClients[i].FirstName)</a>
+            </dd>
+        }
     </dl>
 </div>
 <div>

@@ -38,6 +38,8 @@ namespace WebAppManagement.Controllers
             }
 
             var person = await _context.Employees
+                .Include("MyManager")
+                .Include("MyClients")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (person == null)
             {
@@ -95,7 +97,7 @@ namespace WebAppManagement.Controllers
         [Authorize(Roles = "Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("PersonId,FirstName,LastName,DateOfBirth,OfficeName,IsJunior")] Employee person)
+        public async Task<IActionResult> Edit(string id, [Bind("Id,FirstName,LastName,DateOfBirth,OfficeName,IsJunior")] Employee person)
         {
             if (id != person.Id)
             {
@@ -106,10 +108,11 @@ namespace WebAppManagement.Controllers
             {
                 try
                 {
-                    _context.Update(person);
+                    Employee emp = _context.Employees.Find(id);
+                    _context.Entry(emp).CurrentValues.SetValues(person);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException e)
                 {
                     if (!PersonExists(person.Id))
                     {

@@ -51,24 +51,22 @@ namespace WebAPIWPF.Controllers
         // GET: api/Clients/NbClient
         //Get Nombre De Client De La Banque
         [HttpGet("NbClient")]
-        public int GetNbClient()
+        public async Task<ActionResult<Int32>> GetNbClient()
         {
-            return _context.Clients.ToList().Count();
+            return await _context.Clients.CountAsync();
         }
 
         //Get Nombre De Client De La Banque Par Manager
         [HttpGet("NbClientByManager")]
-        public List<List<string>> GetNbClientByManager()
+        public async Task<ActionResult<List<List<string>>>> GetNbClientByManager()
         {
             List<List<string>> result = new List<List<string>>();
-            foreach (var manager in _context.Managers.ToList())
+            foreach (var manager in await _context.Managers.ToListAsync())
             {
-                _context.Clients.ToList();
                 var nbClientParManager = 0;
-                var ListEmployeesParManager = _context.Employees.Where(emp => emp.MyManager.Id == manager.Id).ToList();
-                foreach (var employee in ListEmployeesParManager)
+                foreach (var employee in await _context.Employees.Where(emp => emp.MyManager.Id == manager.Id).ToListAsync())
                 {
-                    nbClientParManager += employee.MyClients.Count();
+                    nbClientParManager += await _context.Clients.Where(cl => cl.MyEmployee == employee).CountAsync();
                 }
                 result.Add(new List<string> { $"{manager.FirstName} {manager.LastName}", nbClientParManager.ToString() });
             }
@@ -77,14 +75,14 @@ namespace WebAPIWPF.Controllers
 
         //Get Somme Epargne Par Clients
         [HttpGet("SavingsAmountByClients")]
-        public List<List<string>> GetSavingsAmountByClients()
+        public async Task<ActionResult<List<List<string>>>> GetSavingsAmountByClients()
         {
             List<List<string>> result = new List<List<string>>();
-            foreach (var client in _context.Clients.ToList())
+            foreach (var client in await _context.Clients.ToListAsync())
             {
                 //var ListAccountParClients = client.MyAccounts.Where(acc => acc.AccountOwner == client).ToList();
                 decimal epargneParClient = 0M;
-                var ListAccountSavingByClient = _context.Savings.Where(sav => sav.AccountOwner == client).ToList();
+                var ListAccountSavingByClient = await _context.Savings.Where(sav => sav.AccountOwner == client).ToListAsync();
                 foreach (var saving in ListAccountSavingByClient)
                 {
                     epargneParClient += saving.Balance;
@@ -96,19 +94,18 @@ namespace WebAPIWPF.Controllers
 
         //Get Somme Epargne Par Clients Par Manager
         [HttpGet("SavingsAmountByClientsByManager")]
-        public List<List<string>> GetSavingsAmountByClientsByManager()
+        public async Task<ActionResult<List<List<string>>>> GetSavingsAmountByClientsByManager()
         {
             List<List<string>> result = new List<List<string>>();
-            foreach (var manager in _context.Managers.ToList())
+            foreach (var manager in await _context.Managers.ToListAsync())
             {
                 decimal epargneParManager = 0M;
-                var ListEmployeesParManager = _context.Employees.Where(emp => emp.MyManager.Id == manager.Id).ToList();
+                var ListEmployeesParManager = await _context.Employees.Where(emp => emp.MyManager.Id == manager.Id).ToListAsync();
                 foreach (var employee in ListEmployeesParManager)
                 {
-                    _context.Clients.ToList();
-                    foreach (var client in employee.MyClients.ToList())
+                    foreach (var client in await _context.Clients.Where(cl => cl.MyEmployee == employee).ToListAsync())
                     {
-                        var ListAccountSavingByClient = _context.Savings.Where(sav => sav.AccountOwner == client).ToList();
+                        var ListAccountSavingByClient = await _context.Savings.Where(sav => sav.AccountOwner == client).ToListAsync();
                         foreach (var saving in ListAccountSavingByClient)
                         {
                             epargneParManager += saving.Balance;
@@ -122,14 +119,14 @@ namespace WebAPIWPF.Controllers
 
         //solde total de l’ensemble des comptes de la banque 
         [HttpGet("TotalBalanceOfBank")]
-        public decimal GetTotalBalanceOfBank()
+        public async Task<ActionResult<decimal>> GetTotalBalanceOfBank()
         {
             decimal soldeTotal = 0M;
-            foreach (var saving in _context.Savings.ToList())
+            foreach (var saving in await _context.Savings.ToListAsync())
             {
                 soldeTotal += saving.Balance;
             }
-            foreach (var deposit in _context.Deposits.ToList())
+            foreach (var deposit in await _context.Deposits.ToListAsync())
             {
                 soldeTotal += deposit.Balance;
             }
@@ -138,48 +135,46 @@ namespace WebAPIWPF.Controllers
 
         //Le pourcentage de clients qui possèdent une carte bancaire
         [HttpGet("PercentageOfCustomersWhoHaveCreditCard")]
-        public double GetPercentageOfCustomersWhoHaveCreditCard()
+        public async Task<ActionResult<double>> GetPercentageOfCustomersWhoHaveCreditCard()
         {
             int nbCard = 0;
-            foreach (var client in _context.Clients.ToList())
+            foreach (var client in await _context.Clients.ToListAsync())
             {
-                foreach (var deposit in _context.Deposits.Where(sav => sav.AccountOwner == client).ToList())
+                foreach (var deposit in await _context.Deposits.Where(sav => sav.AccountOwner == client).ToListAsync())
                 {
                     if (deposit != null)
                     {
-                        _context.Cards.ToList();
-                        if (deposit.DepositCards.ToList().Count > 0)
+                        if (await _context.Cards.Where(c => c.CardDeposit == deposit).CountAsync()/*deposit.DepositCards.ToList().Count*/ > 0)
                         {
                             nbCard++;
                         }
                     }
                 }
             }
-            return Math.Round(((double)nbCard / (double)_context.Clients.Count()) * 100D,2);
+            return Math.Round(((double)nbCard / (double) await _context.Clients.CountAsync()) * 100D,2);
         }
 
         //Le pourcentage de clients qui possèdent une carte bancaire par manager 
         [HttpGet("PercentageOfCustomersWhoHaveCreditCardByManager")]
-        public List<List<string>> GetPercentageOfCustomersWhoHaveCreditCardByManager()
+        public async Task<ActionResult<List<List<string>>>> GetPercentageOfCustomersWhoHaveCreditCardByManager()
         {
             List<List<string>> pourcentageParManager = new List<List<string>>();
-            foreach (var manager in _context.Managers.ToList())
+            foreach (var manager in await _context.Managers.ToListAsync())
             {
                 int nbCardParManager = 0;
                 int nbClientsByManager = 0;
-                var ListEmployeesParManager = _context.Employees.Where(emp => emp.MyManager.Id == manager.Id).ToList();
+                var ListEmployeesParManager = await _context.Employees.Where(emp => emp.MyManager.Id == manager.Id).ToListAsync();
                 foreach (var employee in ListEmployeesParManager)
                 {
-                    _context.Clients.ToList();
-                    nbClientsByManager += employee.MyClients.ToList().Count();
-                    foreach (var client in employee.MyClients.ToList())
+                    nbClientsByManager += await _context.Clients.Where(cl => cl.MyEmployee == employee).CountAsync();
+                    foreach (var client in await _context.Clients.Where(cl => cl.MyEmployee == employee).ToListAsync())
                     {
-                        foreach (var deposit in _context.Deposits.Where(sav => sav.AccountOwner == client).ToList())
+                        foreach (var deposit in await _context.Deposits.Where(sav => sav.AccountOwner == client).ToListAsync())
                         {
                             if (deposit != null)
                             {
-                                _context.Cards.ToList();
-                                if (deposit.DepositCards.ToList().Count > 0)
+                                
+                                if (await _context.Cards.Where(c => c.CardDeposit == deposit).CountAsync() > 0)
                                 {
                                     nbCardParManager++;
                                 }
@@ -194,38 +189,35 @@ namespace WebAPIWPF.Controllers
 
         //Le pourcentage de clients qui possèdent un compte d’épargne 
         [HttpGet("PercentageOfCustomersWhoHaveBankAccount")]
-        public double GetPercentageOfCustomersWhoHaveBankAccount()
+        public async Task<ActionResult<double>> GetPercentageOfCustomersWhoHaveBankAccount()
         {
             int nbSaving = 0;
-            foreach (var client in _context.Clients.ToList())
+            foreach (var client in await _context.Clients.ToListAsync())
             {
-                var ListAccountSavingByClient = _context.Savings.Where(sav => sav.AccountOwner == client).ToList();
-                if (ListAccountSavingByClient.Count > 0)
+                if (await _context.Savings.Where(sav => sav.AccountOwner == client).CountAsync() > 0)
                 {
                     nbSaving++;
                 }
             }
-            return Math.Round(((double)nbSaving / (double)_context.Clients.Count()) * 100D,2);
+            return Math.Round(((double)nbSaving / (double) await _context.Clients.CountAsync()) * 100D,2);
         }
 
         //Le pourcentage de clients qui possèdent un compte d’épargne par manager
         [HttpGet("PercentageOfCustomersWhoHaveBankAccountByManager")]
-        public List<List<string>> GetPercentageOfCustomersWhoHaveBankAccountByManager()
+        public async Task<ActionResult<List<List<string>>>> GetPercentageOfCustomersWhoHaveBankAccountByManager()
         {
             List<List<string>> result = new List<List<string>>();
-            foreach (var manager in _context.Managers.ToList())
+            foreach (var manager in await _context.Managers.ToListAsync())
             {
                 int nbClientsByManager = 0;
-                var ListEmployeesParManager = _context.Employees.Where(emp => emp.MyManager.Id == manager.Id).ToList();
+                var ListEmployeesParManager = await _context.Employees.Where(emp => emp.MyManager.Id == manager.Id).ToListAsync();
                 int nbSavingByManager = 0;
                 foreach (var employee in ListEmployeesParManager)
                 {
-                    _context.Clients.ToList();
-                    nbClientsByManager += employee.MyClients.ToList().Count();
-                    foreach (var client in employee.MyClients.ToList())
+                    nbClientsByManager += await _context.Clients.Where(cl => cl.MyEmployee == employee).CountAsync();
+                    foreach (var client in await _context.Clients.Where(cl => cl.MyEmployee == employee).ToListAsync())
                     {
-                        var ListAccountSavingByClient = _context.Savings.Where(sav => sav.AccountOwner == client).ToList();
-                        if (ListAccountSavingByClient.Count > 0)
+                        if (await _context.Savings.Where(sav => sav.AccountOwner == client).CountAsync() > 0)
                         {
                             nbSavingByManager++;
                         }
