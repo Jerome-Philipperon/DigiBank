@@ -38,6 +38,8 @@ namespace WebAppManagement.Controllers
             }
 
             var person = await _context.Employees
+                .Include("MyManager")
+                .Include("MyClients")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (person == null)
             {
