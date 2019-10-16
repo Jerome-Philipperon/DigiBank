@@ -65,7 +65,7 @@ namespace WebAppManagement.Controllers
             {
                 _context.Add(card);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction($"Details/{card.CardDeposit.AccountId}", "Deposits"); //TODO : Référence au Deposit en cours pour que la redirection fonctionne correctement
             }
             return View(card);
         }
