@@ -22,14 +22,16 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Clients
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Clients.ToListAsync());
+            List<Client> clients = new List<Client>();
+            clients = await _context.Clients.Where(c => c.MyEmployee.UserName == User.Identity.Name).ToListAsync();
+            return View(clients);
         }
 
         // GET: Clients/Details/5
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
@@ -50,7 +52,7 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Clients/Create
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         public IActionResult Create()
         {
             CreateClientViewModel cC = new CreateClientViewModel();
@@ -66,7 +68,7 @@ namespace WebAppManagement.Controllers
         // POST: Clients/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Client,IdSelected")] CreateClientViewModel person)
@@ -84,7 +86,7 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Clients/Edit/5
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -113,7 +115,7 @@ namespace WebAppManagement.Controllers
         // POST: Clients/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("Client,IdSelected")] CreateClientViewModel person)
@@ -152,7 +154,7 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Clients/Delete/5
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -171,7 +173,7 @@ namespace WebAppManagement.Controllers
         }
 
         // POST: Clients/Delete/5
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)

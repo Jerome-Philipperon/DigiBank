@@ -25,7 +25,7 @@ namespace WebAppManagement.Controllers
         public async Task<IActionResult> Index()
         {
             string personMail = this.User.Identity.Name;
-            return View(await _context.Employees.Where(e => e.MyManager.Email == personMail).ToListAsync());
+            return View(await _context.Employees.Where(e => e.MyManager.UserName == personMail).ToListAsync());
         }
 
         // GET: Employees/Details/5
@@ -66,7 +66,7 @@ namespace WebAppManagement.Controllers
         {
             if (ModelState.IsValid)
             {
-                person.MyManager = _context.Managers.SingleOrDefault(m => m.Email == this.User.Identity.Name);
+                person.MyManager = _context.Managers.SingleOrDefault(m => m.UserName == this.User.Identity.Name);
                 _context.Add(person);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
