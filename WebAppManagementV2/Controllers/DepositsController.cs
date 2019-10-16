@@ -21,14 +21,30 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Deposits
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Deposits.ToListAsync());
+            List<Deposit> deposits = new List<Deposit>();
+            Employee emp = await _context.Employees
+                .Include("MyManager")
+                .SingleOrDefaultAsync(e => e.UserName == User.Identity.Name);
+            if(emp is Manager)
+            {
+                Manager man = await _context.Managers
+                .SingleOrDefaultAsync(e => e.UserName == User.Identity.Name);
+                deposits = await _context.Deposits
+                .Where(s => s.AccountOwner.MyEmployee.MyManager.Id == emp.Id).ToListAsync();
+            }
+            else
+            {
+                deposits = await _context.Deposits
+                .Where(s => s.AccountOwner.MyEmployee.Id == emp.Id).ToListAsync();
+            }
+            return View(deposits);
         }
 
         // GET: Deposits/Details/5
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -37,6 +53,7 @@ namespace WebAppManagement.Controllers
             }
 
             var account = await _context.Deposits
+                .Include("AccountOwner")
                 .Include("DepositCards")
                 .FirstOrDefaultAsync(m => m.AccountId == id);
             if (account == null)
@@ -48,7 +65,7 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Deposits/Create
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         public IActionResult Create()
         {
             return View();
@@ -57,7 +74,7 @@ namespace WebAppManagement.Controllers
         // POST: Deposits/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AccountId,BankCode,BranchCode,AccountNumber,Key,BBAN,IBAN,BIC,Balance,CreationDate,AutorizedOverdraft,OverdraftChargeRate")] Deposit account)
@@ -73,7 +90,7 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Deposits/Edit/5
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -92,7 +109,7 @@ namespace WebAppManagement.Controllers
         // POST: Deposits/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("AccountId,BankCode,BranchCode,AccountNumber,Key,BBAN,IBAN,BIC,Balance,CreationDate,AutorizedOverdraft,OverdraftChargeRate")] Deposit account)
@@ -126,7 +143,7 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Deposits/Delete/5
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -145,7 +162,7 @@ namespace WebAppManagement.Controllers
         }
 
         // POST: Deposits/Delete/5
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -162,7 +179,7 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Cards/Create
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         public IActionResult CreateNewCard(int? id)
         {
             //var account = _context.Deposits.Find(id);
@@ -173,7 +190,7 @@ namespace WebAppManagement.Controllers
         // POST: Cards/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateNewCard([Bind("CardId,NetworkIssuer,CardNumber,SecurityCode,ExpirationDate")] Card card, int? id)

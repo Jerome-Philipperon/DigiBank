@@ -41,6 +41,12 @@
             @{string url2 = "https://localhost:44308/" + Model.CardDeposit.GetType().ToString().Substring(12) + "s/Details/" + Model.CardDeposit.AccountId;}
             @Model.CardDeposit.GetType().ToString().Substring(12) n° : <a href=@url2>@Html.DisplayFor(model => model.CardDeposit.AccountNumber)</a>
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CardDeposit.AccountOwner)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CardDeposit.AccountOwner.LastName) @Html.DisplayFor(model => model.CardDeposit.AccountOwner.FirstName)
+        </dd>
     </dl>
 </div>
 <div>

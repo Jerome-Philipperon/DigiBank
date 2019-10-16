@@ -26,7 +26,12 @@ namespace WebAppManagement.Controllers
         public async Task<IActionResult> Index()
         {
             List<Client> clients = new List<Client>();
-            clients = await _context.Clients.Where(c => c.MyEmployee.UserName == User.Identity.Name).ToListAsync();
+            Employee emp = await _context.Employees.SingleOrDefaultAsync(e => e.UserName == User.Identity.Name);
+            clients = await _context.Clients.Where(c => c.MyEmployee.Id == emp.Id).ToListAsync();
+            if(emp is Manager)
+            {
+                clients.AddRange(await _context.Clients.Where(c => c.MyEmployee.MyManager.Id == emp.Id).ToListAsync());
+            }
             return View(clients);
         }
 
