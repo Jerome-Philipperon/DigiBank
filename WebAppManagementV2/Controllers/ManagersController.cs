@@ -22,9 +22,14 @@ namespace WebAppManagement.Controllers
 
         // GET: Managers
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Managers.ToListAsync());
+            List<Manager> managers = _context.Managers.Where(m => m.MyManager.UserName == User.Identity.Name).ToList();
+            if(managers.Count == 0)
+            {
+                return new ForbidResult();
+            }
+            return View(managers);
         }
 
         // GET: Managers/Details/5
@@ -37,6 +42,7 @@ namespace WebAppManagement.Controllers
             }
 
             var person = await _context.Managers
+                .Include("MyEmployees")
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (person == null)
             {
