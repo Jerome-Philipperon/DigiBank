@@ -14,6 +14,6 @@ namespace DomainModel
         public decimal FreeOverdraft { get; set; }
         [Required]
         public decimal OverdraftChargeRate { get; set; }
-        public ICollection<Card> DepositCards { get; set; }
+        public List<Card> DepositCards { get; set; }
     }
 }

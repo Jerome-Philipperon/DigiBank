@@ -37,6 +37,7 @@ namespace WebAppManagement.Controllers
             }
 
             var card = await _context.Cards
+                .Include("CardDeposit")
                 .FirstOrDefaultAsync(m => m.CardId == id);
             if (card == null)
             {
