@@ -1,0 +1,30 @@
+.all {
+    margin: 10px;
+  }
+  
+  .title {
+      font-weight: bold;
+  }
+  
+  .flex-container {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .flex-container div {
+    border: 2px solid blue;
+    padding: 5px;
+  }
+  
+  .desc {
+    width: 200px;
+  }
+  
+  .name {
+    width: 200px;
+  }
+  
+  .other {
+    width: 60px;
+  }
+  
