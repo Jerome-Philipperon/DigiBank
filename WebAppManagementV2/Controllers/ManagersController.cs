@@ -24,7 +24,7 @@ namespace WebAppManagement.Controllers
         [Authorize(Roles = "Manager")]
         public IActionResult Index()
         {
-            List<Manager> managers = _context.Managers.Where(m => m.MyManager.UserName == User.Identity.Name).ToList();
+            List<Manager> managers = _context.Managers.Where(m => m.MyManager.Email == User.Identity.Name).ToList();
             if(managers.Count == 0)
             {
                 return new ForbidResult();
