@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace DomainModel
 {
@@ -14,7 +15,7 @@ namespace DomainModel
         [Required]
         public string City { get; set; }
         public Employee MyEmployee { get; set; }
-        
+        [JsonIgnore]
         public ICollection<Account> MyAccounts { get; set; }
         
     }

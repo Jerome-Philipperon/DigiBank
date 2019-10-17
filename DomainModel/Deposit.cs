@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace DomainModel
 {
@@ -14,6 +15,7 @@ namespace DomainModel
         public decimal FreeOverdraft { get; set; }
         [Required]
         public decimal OverdraftChargeRate { get; set; }
+        [JsonIgnore]
         public ICollection<Card> DepositCards { get; set; }
     }
 }
