@@ -8,6 +8,6 @@ namespace DomainModel
     public class Manager : Employee
     {
         [JsonIgnore]
-        public ICollection<Employee> MyEmployees { get; set; }
+        public List<Employee> MyEmployees { get; set; }
     }
 }

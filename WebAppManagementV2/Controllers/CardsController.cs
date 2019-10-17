@@ -21,14 +21,30 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Cards
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Cards.ToListAsync());
+            List<Card> cards = new List<Card>();
+            Employee emp = await _context.Employees
+                .Include("MyManager")
+                .SingleOrDefaultAsync(e => e.Email == User.Identity.Name);
+            if (emp is Manager)
+            {
+                Manager man = await _context.Managers
+                .SingleOrDefaultAsync(e => e.Email == User.Identity.Name);
+                cards = await _context.Cards
+                .Where(c => c.CardDeposit.AccountOwner.MyEmployee.MyManager.Id == man.Id).ToListAsync();
+            }
+            else
+            {
+                cards = await _context.Cards
+                .Where(c => c.CardDeposit.AccountOwner.MyEmployee.Id == emp.Id).ToListAsync();
+            }
+            return View(cards);
         }
 
         // GET: Cards/Details/5
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -37,6 +53,8 @@ namespace WebAppManagement.Controllers
             }
 
             var card = await _context.Cards
+                .Include("CardDeposit")
+                .Include("CardDeposit.AccountOwner")
                 .FirstOrDefaultAsync(m => m.CardId == id);
             if (card == null)
             {
@@ -47,7 +65,7 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Cards/Create
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         public IActionResult Create()
         {
             return View();
@@ -56,7 +74,7 @@ namespace WebAppManagement.Controllers
         // POST: Cards/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CardId,NetworkIssuer,CardNumber,SecurityCode,ExpirationDate")] Card card)
@@ -65,13 +83,13 @@ namespace WebAppManagement.Controllers
             {
                 _context.Add(card);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction($"Details/{card.CardDeposit.AccountId}", "Deposits"); //TODO : Référence au Deposit en cours pour que la redirection fonctionne correctement
             }
             return View(card);
         }
 
         // GET: Cards/Edit/5
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,7 +108,7 @@ namespace WebAppManagement.Controllers
         // POST: Cards/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CardId,NetworkIssuer,CardNumber,SecurityCode,ExpirationDate")] Card card)
@@ -124,7 +142,7 @@ namespace WebAppManagement.Controllers
         }
 
         // GET: Cards/Delete/5
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -143,7 +161,7 @@ namespace WebAppManagement.Controllers
         }
 
         // POST: Cards/Delete/5
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Employee")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
