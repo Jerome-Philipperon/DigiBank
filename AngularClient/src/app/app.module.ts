@@ -10,6 +10,9 @@ import { InformationsComponent } from './informations/informations.component';
 import { AccountsComponent } from './accounts/accounts.component';
 import { RibComponent } from './accounts/rib/rib.component';
 import { TransferComponent } from './accounts/transfer/transfer.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { DetailsComponent } from './accounts/details/details.component';
+import { ContactComponent } from './contact/contact.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +23,10 @@ import { TransferComponent } from './accounts/transfer/transfer.component';
     InformationsComponent,
     AccountsComponent,
     RibComponent,
-    TransferComponent
+    TransferComponent,
+    NotFoundComponent,
+    DetailsComponent,
+    ContactComponent
   ],
   imports: [
     BrowserModule,
