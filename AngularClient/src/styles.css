@@ -1,30 +1,68 @@
-.all {
-    margin: 10px;
-  }
+.flex-container {
+  display: flex;
+  flex-direction: row;
+}
+
+:host {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 14px;
+  color: #333;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.toolbar {
+  height: 60px;
+  margin: -8px;
+  display: flex;
+  align-items: center;
+  background-color: #1976d2;
+  color: white;
+  font-weight: 600;
+}
+
+.toolbar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.toolbar ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+.toolbar a {
+  color : black;
+}
+
+a:hover {
+  color: #125699;
+}
+
+footer {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  line-height: 20px;
+}
+
+footer a {
+  display: flex;
+  align-items: center;
+}
+
+footer p {
+  display: flex;
+  align-items: center;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 767px) {
+
+}
+
+@media screen and (max-width: 575px) {
   
-  .title {
-      font-weight: bold;
-  }
-  
-  .flex-container {
-    display: flex;
-    flex-direction: row;
-  }
-  
-  .flex-container div {
-    border: 2px solid blue;
-    padding: 5px;
-  }
-  
-  .desc {
-    width: 200px;
-  }
-  
-  .name {
-    width: 200px;
-  }
-  
-  .other {
-    width: 60px;
-  }
-  
+}
