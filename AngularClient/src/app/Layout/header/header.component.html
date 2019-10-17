@@ -1,1 +1,18 @@
-<p>header works!</p>
+<header>
+    <nav>
+      <ul>
+        <li>
+          <a [routerLink]="[ '/login' ]" routerLinkActive="active">Login</a>
+        </li>
+        <li>
+          <a [routerLink]="[ '/informations' ]" routerLinkActive="active">Informations</a>
+        </li>
+        <li>
+          <a [routerLink]="[ '/accounts' ]" routerLinkActive="active">Accounts</a>
+        </li>
+        <li>
+            <a [routerLink]="[ '/contact' ]" routerLinkActive="active">Contact</a>
+          </li>
+      </ul>
+    </nav>
+  </header>
