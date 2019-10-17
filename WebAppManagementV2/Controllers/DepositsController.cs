@@ -27,11 +27,11 @@ namespace WebAppManagement.Controllers
             List<Deposit> deposits = new List<Deposit>();
             Employee emp = await _context.Employees
                 .Include("MyManager")
-                .SingleOrDefaultAsync(e => e.UserName == User.Identity.Name);
+                .SingleOrDefaultAsync(e => e.Email == User.Identity.Name);
             if(emp is Manager)
             {
                 Manager man = await _context.Managers
-                .SingleOrDefaultAsync(e => e.UserName == User.Identity.Name);
+                .SingleOrDefaultAsync(e => e.Email == User.Identity.Name);
                 deposits = await _context.Deposits
                 .Where(s => s.AccountOwner.MyEmployee.MyManager.Id == emp.Id).ToListAsync();
             }

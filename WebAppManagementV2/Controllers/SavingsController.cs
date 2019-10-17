@@ -29,11 +29,11 @@ namespace WebAppManagement.Controllers
             List<Saving> savings = new List<Saving>();
             Employee emp = await _context.Employees
                 .Include("MyManager")
-                .SingleOrDefaultAsync(e => e.UserName == User.Identity.Name);
+                .SingleOrDefaultAsync(e => e.Email == User.Identity.Name);
             if (emp is Manager)
             {
                 Manager man = await _context.Managers
-                .SingleOrDefaultAsync(e => e.UserName == User.Identity.Name);
+                .SingleOrDefaultAsync(e => e.Email == User.Identity.Name);
                 savings = await _context.Savings
                 .Where(s => s.AccountOwner.MyEmployee.MyManager.Id == man.Id).ToListAsync();
             }

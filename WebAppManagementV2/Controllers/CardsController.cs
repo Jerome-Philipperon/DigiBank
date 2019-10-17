@@ -27,11 +27,11 @@ namespace WebAppManagement.Controllers
             List<Card> cards = new List<Card>();
             Employee emp = await _context.Employees
                 .Include("MyManager")
-                .SingleOrDefaultAsync(e => e.UserName == User.Identity.Name);
+                .SingleOrDefaultAsync(e => e.Email == User.Identity.Name);
             if (emp is Manager)
             {
                 Manager man = await _context.Managers
-                .SingleOrDefaultAsync(e => e.UserName == User.Identity.Name);
+                .SingleOrDefaultAsync(e => e.Email == User.Identity.Name);
                 cards = await _context.Cards
                 .Where(c => c.CardDeposit.AccountOwner.MyEmployee.MyManager.Id == man.Id).ToListAsync();
             }

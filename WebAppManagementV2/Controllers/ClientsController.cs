@@ -26,7 +26,7 @@ namespace WebAppManagement.Controllers
         public async Task<IActionResult> Index()
         {
             List<Client> clients = new List<Client>();
-            Employee emp = await _context.Employees.SingleOrDefaultAsync(e => e.UserName == User.Identity.Name);
+            Employee emp = await _context.Employees.SingleOrDefaultAsync(e => e.Email == User.Identity.Name);
             clients = await _context.Clients.Where(c => c.MyEmployee.Id == emp.Id).ToListAsync();
             if(emp is Manager)
             {
