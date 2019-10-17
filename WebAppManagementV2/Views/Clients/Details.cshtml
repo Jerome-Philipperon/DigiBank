@@ -10,24 +10,44 @@
     <h4>Person</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.FirstName)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FirstName)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.LastName)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.LastName)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.DateOfBirth)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.DateOfBirth)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MyEmployee)
+        </dt>
+        <dd class="col-sm-10">
+            @{string url = "https://localhost:44308/Employees/Details/" + Model.MyEmployee.Id;}
+            <a href=@url>@Html.DisplayFor(model => model.MyEmployee.LastName) @Html.DisplayFor(model => model.MyEmployee.FirstName)</a>
+        </dd>
+        @if (Model.MyAccounts.Count != 0)
+        {
+            for (int i = 0; i < Model.MyAccounts.Count; i++)
+            {
+            <dt class="col-sm-2">
+                Account @(i + 1) :
+            </dt>
+            <dd class="col-sm-10">
+                @{string url2 = "https://localhost:44308/" + Model.MyAccounts[i].GetType().ToString().Substring(12) + "s/Details/" + Model.MyAccounts[i].AccountId;}
+                @Model.MyAccounts[i].GetType().ToString().Substring(12) n° : <a href=@url2>@Html.DisplayFor(model => model.MyAccounts[i].AccountNumber)</a>
+            </dd>
+            }
+        }
     </dl>
 </div>
 <div>

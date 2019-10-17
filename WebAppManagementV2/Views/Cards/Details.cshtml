@@ -10,33 +10,47 @@
     <h4>Card</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.NetworkIssuer)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.NetworkIssuer)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CardNumber)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CardNumber)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.SecurityCode)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.SecurityCode)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ExpirationDate)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ExpirationDate)
+        </dd>
+        <dt class="col-sm-2">
+            Deposit Account:
+        </dt>
+        <dd class="col-sm-10">
+            @{string url = "https://localhost:44308/" + Model.CardDeposit.GetType().ToString().Substring(12) + "s/Details/" + Model.CardDeposit.AccountId;}
+            @Model.CardDeposit.GetType().ToString().Substring(12) n° : <a href=@url>@Html.DisplayFor(model => model.CardDeposit.AccountNumber)</a>
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CardDeposit.AccountOwner)
+        </dt>
+        <dd class="col-sm-10">
+            @{string url2 = "https://localhost:44308/Clients/Details/" + Model.CardDeposit.AccountOwner.Id;}
+            <a href=@url2>@Html.DisplayFor(model => model.CardDeposit.AccountOwner.LastName) @Html.DisplayFor(model => model.CardDeposit.AccountOwner.FirstName)</a>
         </dd>
     </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.CardId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" asp-controller="Deposits">Back to Deposits List</a>
 </div>
