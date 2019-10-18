@@ -1,26 +1,26 @@
 <h1>Your informations</h1>
 <div>
   <form class="listOfItems">
-      <label>Last Name:</label>
-      <input type=text disabled="true" value="Your Last Name">
-      <br>
-      <label>First Name:</label>
-      <input type=text disabled="true" value="Your First Name">
-      <br>
-      <label>Date of Birth:</label>
-      <input type=date disabled="true" value="2001-01-01">
-      <br>
+    <label>Last Name:</label>
+    <input type=text disabled="true" value={{myClient.lastName}}>
+    <br>
+    <label>First Name:</label>
+    <input type=text disabled="true" value={{myClient.firstName}}>
+    <br>
+    <label>Date of Birth:</label>
+    <input type=date disabled="true" value={{myClient.dateOfBirth}}>
+    <br>
 
     <label>Address:</label>
     <br>
-    <input type=text placeholder="Street" value="Your Street">
+    <input type=text placeholder="Street" value={{myClient.Street}}>
     <br>
-    <input type=text placeholder="ZIP Code" value="Your ZIP Code">
+    <input type=text placeholder="ZIP Code" value={{myClient.ZipCode}}>
     <br>
-    <input type=text placeholder="City" value="Your City">
+    <input type=text placeholder="City" value={{myClient.City}}>
     <br>
     <label>Mail Address:</label>
-    <input type=email placeholder="Mail Address" value="name.firstname@mail.com">
+    <input type=email placeholder="Mail Address" value={{myClient.email}}>
     <br>
     <input type="submit" value="Submit">
   </form>
