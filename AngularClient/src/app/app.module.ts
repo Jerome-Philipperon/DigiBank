@@ -14,6 +14,7 @@ import { TransferComponent } from './accounts/transfer/transfer.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { DetailsComponent } from './accounts/details/details.component';
 import { ContactComponent } from './contact/contact.component';
+import { CurrentUserService } from './current-user.service';
 
 @NgModule({
   declarations: [
@@ -33,9 +34,11 @@ import { ContactComponent } from './contact/contact.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
   ],
-  providers: [],
+  providers: [
+    CurrentUserService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
