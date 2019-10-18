@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using DAL;
 using DomainModel;
 using System.Text.Json;
-
+using Microsoft.AspNetCore.Cors;
 
 namespace WebAPIFrontOffice.Controllers
 {
-    [Route("api")]
+    [EnableCors("api")]
     [ApiController]
     public class ManagersController : ControllerBase
     {
@@ -580,18 +580,22 @@ namespace WebAPIFrontOffice.Controllers
                     }
                 }
             }
-            var employe = await _context.Employees.FindAsync(id2);
-            if (employe == null)
+            else
             {
-                return NotFound();
-            }
-            foreach (var client in _context.Clients.Where(cl => cl.MyEmployee == employe).ToList())
-            {
-                if (client.Id == id3)
+                var employe = await _context.Employees.FindAsync(id2);
+                if (employe == null)
                 {
-                    accounts.AddRange(_context.Accounts.Where(ac => ac.AccountOwner == client).ToList());
+                    return NotFound();
+                }
+                foreach (var client in _context.Clients.Where(cl => cl.MyEmployee == employe).ToList())
+                {
+                    if (client.Id == id3)
+                    {
+                        accounts.AddRange(_context.Accounts.Where(ac => ac.AccountOwner == client).ToList());
+                    }
                 }
             }
+            
 
             return accounts;
         }
@@ -640,14 +644,14 @@ namespace WebAPIFrontOffice.Controllers
         */
         [HttpPut("Employees/{id2}/Clients/{id3}/Account/{id4}")]
         [HttpPut("[controller]/{id}/Employes/{id2}/Clients/{id3}/Account/{id4}")]
-        public async Task<ActionResult<Client>> PutAccountOfClientsByEmployeeByManager(Account account, int id4, string id = null, string id2 = null, string id3 = null )
+        public async Task<ActionResult<Account>> PutAccountOfClientsByEmployeeByManager(Account account, int id4, string id = null, string id2 = null, string id3 = null )
         {
             var client = await _context.Clients.FindAsync(id3);
             var employee = await _context.Employees.FindAsync(id2);
             if (id != null)
             {
                 var manager = await _context.Managers.FindAsync(id);
-                if (manager == null && employee == null && client==null)
+                if (manager == null && employee == null && client == null)
                 {
                     return NotFound();
                 }
@@ -656,7 +660,7 @@ namespace WebAPIFrontOffice.Controllers
                 {
                     if (client.MyEmployee.Id == employee.Id)
                     {
-                        if(account.AccountOwner.Id== client.Id)
+                        if (account.AccountOwner.Id == client.Id)
                         {
                             _context.Entry(account).State = EntityState.Modified;
                         }
@@ -675,27 +679,28 @@ namespace WebAPIFrontOffice.Controllers
                     return BadRequest();
                 }
             }
-
-            if (employee == null)
+            else
             {
-                return NotFound();
-            }
-            if (client.MyEmployee.Id == employee.Id)
-            {
-                if (account.AccountOwner.Id == client.Id)
+                if (employee == null)
                 {
-                    _context.Entry(account).State = EntityState.Modified;
+                    return NotFound();
+                }
+                if (client.MyEmployee.Id == employee.Id)
+                {
+                    if (account.AccountOwner.Id == client.Id)
+                    {
+                        _context.Entry(account).State = EntityState.Modified;
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
                 }
                 else
                 {
                     return BadRequest();
                 }
             }
-            else
-            {
-                return BadRequest();
-            }
-
             try
             {
                 await _context.SaveChangesAsync();
@@ -918,7 +923,7 @@ namespace WebAPIFrontOffice.Controllers
 
         // Cards
 
-        #region Action on Account of Client By Managers and Employees
+        #region Action on cards of an Account of Client By Managers and Employees
         [HttpGet("Employees/{id2}/Clients/{id3}/Account/{id4}/Cards")]
         [HttpGet("[controller]/{id}/Employes/{id2}/Clients/{id3}/Account/{id4}/Cards")]
         public async Task<ActionResult<List<Card>>> GetCardByAccountByClient(int id4, string id = null, string id2 = null, string id3 = null)

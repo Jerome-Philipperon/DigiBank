@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL;
 using DomainModel;
+using Microsoft.AspNetCore.Cors;
 
 namespace WebAPIFrontOffice.Controllers
 {
-    [Route("api/[controller]")]
+    [EnableCors("api/[controller]")]
     [ApiController]
     public class ClientsController : ControllerBase
     {
