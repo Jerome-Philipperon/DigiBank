@@ -17,6 +17,7 @@ namespace WebAPIFrontOffice
 {
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -31,6 +32,17 @@ namespace WebAPIFrontOffice
                 options.UseSqlServer(
                     Configuration.GetConnectionString("MyConnection")));
             services.AddScoped<BankContext>();
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:44310",
+                                        "https://localhost:44310");
+                });
+            });
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddControllers();
         }
 
@@ -41,6 +53,8 @@ namespace WebAPIFrontOffice
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseHttpsRedirection();
 
