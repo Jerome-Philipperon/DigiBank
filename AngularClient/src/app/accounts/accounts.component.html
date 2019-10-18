@@ -1,1 +1,8 @@
-<p>accounts works!</p>
+<h1>Your Accounts:</h1>
+<div class="listOfItems">
+  <ul id="accountList">
+    <li><a [routerLink]="[ '/accounts/details/1' ]" routerLinkActive="active">Deposit 1</a></li>
+    <li><a [routerLink]="[ '/accounts/rib/1' ]" routerLinkActive="active">RIB</a></li>
+    <li><a [routerLink]="[ '/accounts/transfer/1' ]" routerLinkActive="active">Transfer</a></li>
+  </ul>
+</div>

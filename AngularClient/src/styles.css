@@ -3,6 +3,10 @@
   flex-direction: row;
 }
 
+h1{
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 :host {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 14px;
@@ -31,10 +35,13 @@
 .toolbar ul li {
     display: inline;
     margin: 0 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    vertical-align:middle;
 }
 
 .toolbar a {
-  color : black;
+  color : white;
+  text-decoration: none;
 }
 
 a:hover {
@@ -46,6 +53,7 @@ footer {
   display: flex;
   align-items: center;
   line-height: 20px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 footer a {
@@ -57,6 +65,57 @@ footer p {
   display: flex;
   align-items: center;
 }
+
+.listOfItems{
+  margin:10px;
+  clear:both;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.listOfItems input{
+  margin:10px;
+}
+.listOfItems ul li{
+  margin:5px;
+}
+
+.listOfItems ul li a{
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.listOfItems label{
+  margin:10px;
+  width:100px;
+  display:inline-block;
+}
+
+.listOfItems table th, table td{
+  border:black solid 1px;
+  border-collapse: collapse;
+}
+
+.detailsList label{
+  margin:10px;
+}
+
+.detailsList input{
+  margin:5px;
+}
+
+.bigTextBox{
+  width:350px;
+  height:100px;
+}
+
+/* .textToAlign{
+  width:100px;
+  clear:right;
+}
+
+.textToAlign input{
+  widows: 100%; 
+  clear:right;
+}*/
 
 /* Responsive Styles */
 @media screen and (max-width: 767px) {
