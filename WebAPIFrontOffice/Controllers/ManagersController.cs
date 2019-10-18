@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Cors;
 
 namespace WebAPIFrontOffice.Controllers
 {
+    [EnableCors]
     [Route("api")]
     [ApiController]
     public class ManagersController : ControllerBase
@@ -600,13 +601,13 @@ namespace WebAPIFrontOffice.Controllers
             return accounts;
         }
 
-        /*
-        [HttpGet("Employees/{id2}/Clients/{id3}")]
-        [HttpGet("[controller]/{id}/Employes/{id2}/Clients/{id3}")]
-        public async Task<ActionResult<Client>> GetClientsByEmployeeByManager(string id = null, string id2 = null, string id3 = null)
+        [HttpDelete("Employees/{id2}/Clients/{id3}/Saving/{id4}")]
+        [HttpDelete("[controller]/{id}/Employes/{id2}/Clients/{id3}/Saving/{id4}")]
+        public async Task<ActionResult<Manager>> DeleteAccountOfClientsByEmployeeByManager(int id4, string id = null, string id2 = null, string id3 = null)
         {
-            Client client = _context.Clients.Find(id3);
-            var employee = await _context.Employees.FindAsync(id2);
+            Saving saving = await _context.Savings.FindAsync(id4);
+            Client client = await _context.Clients.FindAsync(id3);
+            Employee employee = await _context.Employees.FindAsync(id2);
             if (id != null)
             {
                 var manager = await _context.Managers.FindAsync(id);
@@ -614,37 +615,69 @@ namespace WebAPIFrontOffice.Controllers
                 {
                     return NotFound();
                 }
-                if (employee.MyManager.Id == manager.Id)
+
+                if (manager.Id == employee.MyManager.Id)
                 {
-                    if (client.MyEmployee.Id == id2)
+                    if (client.MyEmployee.Id == employee.Id)
                     {
-                        return client;
+                        if (client.Id == saving.AccountOwner.Id)
+                        {
+                            _context.Savings.Remove(saving);
+                        }
+                        else
+                        {
+                            return BadRequest();
+                        }
+
                     }
                     else
                     {
                         return BadRequest();
                     }
                 }
+                else
+                {
+                    return BadRequest();
+                }
             }
-
             if (employee == null && client == null)
             {
                 return NotFound();
             }
-            if (client.MyEmployee.Id == id2)
+            if (client.MyEmployee.Id == employee.Id)
             {
-                return client;
+                if (client.Id == saving.AccountOwner.Id)
+                {
+                    _context.Savings.Remove(saving);
+                }
+                else
+                {
+                    return BadRequest();
+                }
+
             }
             else
             {
                 return BadRequest();
             }
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
-        */
-        [HttpPut("Employees/{id2}/Clients/{id3}/Account/{id4}")]
-        [HttpPut("[controller]/{id}/Employes/{id2}/Clients/{id3}/Account/{id4}")]
-        public async Task<ActionResult<Account>> PutAccountOfClientsByEmployeeByManager(Account account, int id4, string id = null, string id2 = null, string id3 = null )
+        private bool AccountExists(int id)
+        {
+            return _context.Accounts.Any(e => e.AccountId == id);
+        }
+
+        #endregion
+
+        //Saving
+        #region Saving
+        [HttpPut("Employees/{id2}/Clients/{id3}/Saving/{id4}")]
+        [HttpPut("[controller]/{id}/Employes/{id2}/Clients/{id3}/Saving/{id4}")]
+        public async Task<ActionResult<Account>> PutAccountOfClientsByEmployeeByManager(Saving saving, int id4, string id = null, string id2 = null, string id3 = null )
         {
             var client = await _context.Clients.FindAsync(id3);
             var employee = await _context.Employees.FindAsync(id2);
@@ -660,9 +693,9 @@ namespace WebAPIFrontOffice.Controllers
                 {
                     if (client.MyEmployee.Id == employee.Id)
                     {
-                        if (account.AccountOwner.Id == client.Id)
+                        if (saving.AccountOwner.Id == client.Id)
                         {
-                            _context.Entry(account).State = EntityState.Modified;
+                            _context.Entry(saving).State = EntityState.Modified;
                         }
                         else
                         {
@@ -687,9 +720,9 @@ namespace WebAPIFrontOffice.Controllers
                 }
                 if (client.MyEmployee.Id == employee.Id)
                 {
-                    if (account.AccountOwner.Id == client.Id)
+                    if (saving.AccountOwner.Id == client.Id)
                     {
-                        _context.Entry(account).State = EntityState.Modified;
+                        _context.Entry(saving).State = EntityState.Modified;
                     }
                     else
                     {
@@ -720,9 +753,9 @@ namespace WebAPIFrontOffice.Controllers
         }
 
 
-        [HttpPost("Employees/{id2}/Clients/{id3}/Account")]
-        [HttpPost("[controller]/{id}/Employes/{id2}/Clients/{id3}/Account")]
-        public async Task<ActionResult<Account>> PostAccountOfClientsByEmployeeByManager(Account account, string id = null, string id2 = null, string id3 = null)
+        [HttpPost("Employees/{id2}/Clients/{id3}/Saving")]
+        [HttpPost("[controller]/{id}/Employes/{id2}/Clients/{id3}/Saving")]
+        public async Task<ActionResult<Account>> PostAccountOfClientsByEmployeeByManager(Saving saving, string id = null, string id2 = null, string id3 = null)
         {
             Client client = await _context.Clients.FindAsync(id3);
             Employee employee = await _context.Employees.FindAsync(id2);
@@ -737,23 +770,9 @@ namespace WebAPIFrontOffice.Controllers
                 {
                     if(employee.Id==client.MyEmployee.Id)
                     {
-                        if(client.Id==account.AccountOwner.Id)
+                        if (client.Id == saving.AccountOwner.Id)
                         {
-                            if(account is Saving)
-                            {
-                                _context.Entry((Saving)account).State = EntityState.Modified;
-                            }
-                            else
-                            {
-                                if (account is Deposit)
-                                {
-                                    _context.Entry((Deposit)account).State = EntityState.Modified;
-                                }
-                                else
-                                {
-                                    return BadRequest();
-                                }
-                            }
+                            _context.Entry(saving).State = EntityState.Modified;
                         }
                         else
                         {
@@ -778,23 +797,9 @@ namespace WebAPIFrontOffice.Controllers
             }
             if (employee.Id == client.MyEmployee.Id)
             {
-                if (client.Id == account.AccountOwner.Id)
+                if (client.Id == saving.AccountOwner.Id)
                 {
-                    if (account is Saving)
-                    {
-                        _context.Entry((Saving)account).State = EntityState.Modified;
-                    }
-                    else
-                    {
-                        if (account is Deposit)
-                        {
-                            _context.Entry((Deposit)account).State = EntityState.Modified;
-                        }
-                        else
-                        {
-                            return BadRequest();
-                        }
-                    }
+                    _context.Entry(saving).State = EntityState.Modified;
                 }
                 else
                 {
@@ -808,7 +813,163 @@ namespace WebAPIFrontOffice.Controllers
             }
             catch (DbUpdateException)
             {
-                if (AccountExists(account.AccountId))
+                if (AccountExists(saving.AccountId))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        
+        #endregion
+
+        // Deposit
+        #region Deposit
+        [HttpPut("Employees/{id2}/Clients/{id3}/Deposit/{id4}")]
+        [HttpPut("[controller]/{id}/Employes/{id2}/Clients/{id3}/Deposit/{id4}")]
+        public async Task<ActionResult<Account>> PutAccountOfClientsByEmployeeByManager(Deposit deposit, int id4, string id = null, string id2 = null, string id3 = null)
+        {
+            var client = await _context.Clients.FindAsync(id3);
+            var employee = await _context.Employees.FindAsync(id2);
+            if (id != null)
+            {
+                var manager = await _context.Managers.FindAsync(id);
+                if (manager == null && employee == null && client == null)
+                {
+                    return NotFound();
+                }
+
+                if (employee.MyManager.Id == manager.Id)
+                {
+                    if (client.MyEmployee.Id == employee.Id)
+                    {
+                        if (deposit.AccountOwner.Id == client.Id)
+                        {
+                            _context.Entry(deposit).State = EntityState.Modified;
+                        }
+                        else
+                        {
+                            return BadRequest();
+                        }
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                if (employee == null)
+                {
+                    return NotFound();
+                }
+                if (client.MyEmployee.Id == employee.Id)
+                {
+                    if (deposit.AccountOwner.Id == client.Id)
+                    {
+                        _context.Entry(deposit).State = EntityState.Modified;
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AccountExists(id4))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return NoContent();
+        }
+
+
+        [HttpPost("Employees/{id2}/Clients/{id3}/Deposit")]
+        [HttpPost("[controller]/{id}/Employes/{id2}/Clients/{id3}/Deposit")]
+        public async Task<ActionResult<Account>> PostAccountOfClientsByEmployeeByManager(Deposit deposit, string id = null, string id2 = null, string id3 = null)
+        {
+            Client client = await _context.Clients.FindAsync(id3);
+            Employee employee = await _context.Employees.FindAsync(id2);
+            if (id != null)
+            {
+                var manager = await _context.Managers.FindAsync(id);
+                if (manager == null && employee == null && client == null)
+                {
+                    return NotFound();
+                }
+                if (employee.MyManager.Id == manager.Id)
+                {
+                    if (employee.Id == client.MyEmployee.Id)
+                    {
+                        if (client.Id == deposit.AccountOwner.Id)
+                        {
+                            _context.Entry(deposit).State = EntityState.Modified;
+                        }
+                        else
+                        {
+                            return BadRequest();
+                        }
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
+                }
+                else
+                {
+                    return BadRequest();
+                }
+
+            }
+
+            if (employee == null && client == null)
+            {
+                return NotFound();
+            }
+            if (employee.Id == client.MyEmployee.Id)
+            {
+                if (client.Id == deposit.AccountOwner.Id)
+                {
+                    _context.Entry(deposit).State = EntityState.Modified;
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (AccountExists(deposit.AccountId))
                 {
                     return Conflict();
                 }
@@ -822,104 +983,9 @@ namespace WebAPIFrontOffice.Controllers
         }
 
 
-        [HttpDelete("Employees/{id2}/Clients/{id3}/Account/{id4}")]
-        [HttpDelete("[controller]/{id}/Employes/{id2}/Clients/{id3}/Account/{id4}")]
-        public async Task<ActionResult<Manager>> DeleteAccountOfClientsByEmployeeByManager(int id4, string id= null, string id2=null, string id3=null)
-        {
-            Account account = await _context.Accounts.FindAsync(id4);
-            Client client = await _context.Clients.FindAsync(id3);
-            Employee employee = await _context.Employees.FindAsync(id2);
-            if (id != null)
-            {
-                var manager = await _context.Managers.FindAsync(id);
-                if (manager == null && employee == null && client==null)
-                {
-                    return NotFound();
-                }
 
-                if (manager.Id == employee.MyManager.Id)
-                {
-                    if (client.MyEmployee.Id == employee.Id)
-                    {
-                        if (client.Id == account.AccountOwner.Id)
-                        {
-                            if(account is Saving)
-                            {
-                                _context.Savings.Remove((Saving)account);
-                            }
-                            else
-                            {
-                                if (account is Deposit)
-                                {
-                                    _context.Deposits.Remove((Deposit)account);
-                                }
-                                else
-                                {
-                                    return BadRequest();
-                                }
-                            }
-                        }
-                        else
-                        {
-                            return BadRequest();
-                        }
+#endregion
 
-                    }
-                    else
-                    {
-                        return BadRequest();
-                    }
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            if (employee == null && client == null)
-            {
-                return NotFound();
-            }
-            if (client.MyEmployee.Id == employee.Id)
-            {
-                if (client.Id == account.AccountOwner.Id)
-                {
-                    if (account is Saving)
-                    {
-                        _context.Savings.Remove((Saving)account);
-                    }
-                    else
-                    {
-                        if (account is Deposit)
-                        {
-                            _context.Deposits.Remove((Deposit)account);
-                        }
-                        else
-                        {
-                            return BadRequest();
-                        }
-                    }
-                }
-                else
-                {
-                    return BadRequest();
-                }
-
-            }
-            else
-            {
-                return BadRequest();
-            }
-
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool AccountExists(int id)
-        {
-            return _context.Accounts.Any(e => e.AccountId == id);
-        }
-        #endregion
 
         // Cards
 
@@ -1003,48 +1069,6 @@ namespace WebAPIFrontOffice.Controllers
             return cards;
         }
 
-        /*
-        [HttpGet("Employees/{id2}/Clients/{id3}")]
-        [HttpGet("[controller]/{id}/Employes/{id2}/Clients/{id3}")]
-        public async Task<ActionResult<Client>> GetClientsByEmployeeByManager(string id = null, string id2 = null, string id3 = null)
-        {
-            Client client = _context.Clients.Find(id3);
-            var employee = await _context.Employees.FindAsync(id2);
-            if (id != null)
-            {
-                var manager = await _context.Managers.FindAsync(id);
-                if (manager == null && employee == null && client == null)
-                {
-                    return NotFound();
-                }
-                if (employee.MyManager.Id == manager.Id)
-                {
-                    if (client.MyEmployee.Id == id2)
-                    {
-                        return client;
-                    }
-                    else
-                    {
-                        return BadRequest();
-                    }
-                }
-            }
-
-            if (employee == null && client == null)
-            {
-                return NotFound();
-            }
-            if (client.MyEmployee.Id == id2)
-            {
-                return client;
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
-
-        */
         [HttpPut("Employees/{id2}/Clients/{id3}/Account/{id4}/Cards/{id5}")]
         [HttpPut("[controller]/{id}/Employes/{id2}/Clients/{id3}/Account/{id4}/Cards/{id5}")]
         public async Task<ActionResult<Card>> PutCardsByAccountOfClientsByEmployeeByManager(Card card, int id4, int id5, string id = null, string id2 = null, string id3 = null)
