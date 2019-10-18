@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Cors;
 
 namespace WebAPIFrontOffice.Controllers
 {
-    [EnableCors]
     [Route("api")]
     [ApiController]
     public class ManagersController : ControllerBase
