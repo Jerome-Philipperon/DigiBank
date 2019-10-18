@@ -11,7 +11,7 @@ export class CurrentUserService {
 
   public getCurrentUser ()
   {
-    return this.getCurrentUser;
+    return this.currentUser;
   }
 
   public setCurrentUser (user : Client)
