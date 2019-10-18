@@ -17,7 +17,7 @@ namespace WebAPIFrontOffice
 {
     public class Startup
     {
-        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+        readonly string MyAllowSpecificOrigins = "https://localhost:44310";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -38,7 +38,8 @@ namespace WebAPIFrontOffice
                 builder =>
                 {
                     builder.WithOrigins("http://localhost:44310",
-                                        "https://localhost:44310");
+                                        "https://localhost:44310",
+                                        "http://127.0.0.1:4200");
                 });
             });
 

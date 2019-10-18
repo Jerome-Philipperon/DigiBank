@@ -11,7 +11,8 @@ using Microsoft.AspNetCore.Cors;
 
 namespace WebAPIFrontOffice.Controllers
 {
-    [EnableCors]
+    [DisableCors]
+    //[EnableCors("http://127.0.0.1:4200/")]
     [Route("api/[controller]")]
     [ApiController]
     public class ClientsController : ControllerBase
@@ -22,7 +23,7 @@ namespace WebAPIFrontOffice.Controllers
         {
             _context = context;
         }
-
+        
         // GET: api/Clients
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Client>>> GetClients()
