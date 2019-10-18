@@ -23,8 +23,8 @@ const routes: Routes = [
     [
       {path : "", component : AccountsComponent},
       {path : "details/:id", component : DetailsComponent},
-      {path : "transfer", component : TransferComponent},
-      {path : "rib", component : RibComponent},
+      {path : "transfer/:id", component : TransferComponent},
+      {path : "rib/:id", component : RibComponent},
     ],
   },
   {path: "contact", component: ContactComponent},
