@@ -1,4 +1,4 @@
-import { Account } from './account';
+import  Account  from './account';
 
 export default class Client {
     firstName : string;
@@ -8,4 +8,5 @@ export default class Client {
     zipCode : number;
     city : string;
     myAccounts : Account[];
+    email : string;
 }

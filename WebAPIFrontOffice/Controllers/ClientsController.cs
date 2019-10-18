@@ -42,6 +42,20 @@ namespace WebAPIFrontOffice.Controllers
             return client;
         }
 
+        // GET: api/Clients/5
+        [HttpGet("{lastName}/{firstName}")]
+        public async Task<ActionResult<Client>> GetClientByName(string lastName, string firstName)
+        {
+            var client = await _context.Clients.SingleOrDefaultAsync(c => c.LastName == lastName && c.FirstName == firstName);
+
+            if (client == null)
+            {
+                return NotFound();
+            }
+
+            return client;
+        }
+
 
         //Get api/Client/deposit                          c'est mo travail
 

@@ -1,7 +1,7 @@
 <h1>Welcome to DigiBank!</h1>
-<form class="listOfItems">
+<div class="listOfItems">
     Enter your name: <br>
-    <input id="firstName" type="text" placeholder="First name">
-    <input id="lastName" type="text" placeholder="Last name"><br>
-    <input type="submit" value="Login">
-</form>
+    <input id="firstName" type="text" [(ngModel)]="firstName" placeholder="First name">
+    <input id="lastName" type="text" [(ngModel)]="lastName" placeholder="Last name"><br>
+    <input type="submit" (click)="callApi()" value="Login">
+</div>
