@@ -8,13 +8,14 @@ import { FooterComponent } from './Layout/footer/footer.component';
 import { LoginComponent } from './login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { InformationsComponent } from './informations/informations.component';
-import { AccountsComponent } from './accounts/accounts.component';
-import { RibComponent } from './accounts/rib/rib.component';
-import { TransferComponent } from './accounts/transfer/transfer.component';
+import { AccountsComponent } from './list/accounts/accounts.component';
+import { RibComponent } from './list/accounts/rib/rib.component';
+import { TransferComponent } from './list/accounts/transfer/transfer.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { DetailsComponent } from './accounts/details/details.component';
+import { DetailsComponent } from './list/accounts/details/details.component';
 import { ContactComponent } from './contact/contact.component';
 import { CurrentUserService } from './current-user.service';
+import { ListComponent } from './list/list.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { CurrentUserService } from './current-user.service';
     TransferComponent,
     NotFoundComponent,
     DetailsComponent,
-    ContactComponent
+    ContactComponent,
+    ListComponent
   ],
   imports: [
     BrowserModule,

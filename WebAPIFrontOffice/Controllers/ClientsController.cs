@@ -58,8 +58,23 @@ namespace WebAPIFrontOffice.Controllers
             return client;
         }
 
+        //Get api/Client/deposit
 
-        //Get api/Client/deposit                          c'est mo travail
+        [HttpGet("Account/{id}")]
+        public async Task<ActionResult<Account>> GetAccountById(int id)
+        {
+            var account = await _context.Accounts.SingleOrDefaultAsync(a => a.AccountId == id);
+            if (account == null)
+            {
+                return NotFound();
+            }
+            account.Type = account.GetType().ToString().Substring(12);
+            return account;
+
+        }
+
+
+        //Get api/Client/deposit
 
         [HttpGet("{id}/Deposit")]
         public async Task<ActionResult<List<Deposit>>> GetClientByDeposit(string id)
@@ -105,9 +120,8 @@ namespace WebAPIFrontOffice.Controllers
         // Get api/Client/account
 
             [HttpGet ("{id}/Account")]
-
             public async Task<ActionResult<List<Account>>> GetClientByAccount (string id)
-        {
+            {
 
             var client = await _context.Clients.FindAsync(id);
             if (client == null)
@@ -116,6 +130,10 @@ namespace WebAPIFrontOffice.Controllers
             }
 
             var AccountByClient = _context.Accounts.Where(acc => acc.AccountOwner == client).ToList();
+            foreach (Account account in AccountByClient)
+            {
+                account.Type = account.GetType().ToString().Substring(12);
+            }
 
             if (AccountByClient == null)
             {
@@ -123,8 +141,8 @@ namespace WebAPIFrontOffice.Controllers
             }
             return AccountByClient;
 
-        }
-
+            }
+    
         // Get api/Client/Card
 
         [HttpGet("{id}/Card")]

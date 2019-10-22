@@ -46,6 +46,7 @@ namespace DomainModel
         [JsonPropertyName("accountOwner")]
         [Required]
         public Client AccountOwner { get; set; }
+        public string Type { get; set; }
 
         public Account()
         {

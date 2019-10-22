@@ -4,5 +4,5 @@ export default class Saving extends Account{
     minimumAmount : number;
     maximumAmount : number;
     interestRate : number;
-    MaximumDate : Date;
+    maximumDate : Date;
 }

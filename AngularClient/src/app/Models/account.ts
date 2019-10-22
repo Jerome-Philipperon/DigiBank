@@ -1,6 +1,7 @@
 import Client from './client';
 
 export default class Account {
+    accountId : string;
     bankCode : string;
     branchCode : string;
     accountNumber : string;
@@ -8,5 +9,6 @@ export default class Account {
     IBAN : string;
     BIC : string;
     balance : number;
-    AccountOwner : Client;
+    accountOwner : Client;
+    type : string;
 }

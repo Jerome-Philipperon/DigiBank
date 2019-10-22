@@ -3,11 +3,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { InformationsComponent } from './informations/informations.component';
 import { ContactComponent } from './contact/contact.component';
-import { AccountsComponent } from './accounts/accounts.component';
+import { AccountsComponent } from './list/accounts/accounts.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { DetailsComponent } from './accounts/details/details.component';
-import { TransferComponent } from './accounts/transfer/transfer.component';
-import { RibComponent } from './accounts/rib/rib.component';
+import { DetailsComponent } from './list/accounts/details/details.component';
+import { TransferComponent } from './list/accounts/transfer/transfer.component';
+import { RibComponent } from './list/accounts/rib/rib.component';
+import { ListComponent } from './list/list.component';
 
 
 const routes: Routes = [
@@ -21,7 +22,7 @@ const routes: Routes = [
     path : "accounts",
     children : 
     [
-      {path : "", component : AccountsComponent},
+      {path : "", component : ListComponent},
       {path : "details/:id", component : DetailsComponent},
       {path : "transfer/:id", component : TransferComponent},
       {path : "rib/:id", component : RibComponent},

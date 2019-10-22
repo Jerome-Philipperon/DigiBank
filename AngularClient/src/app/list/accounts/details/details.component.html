@@ -1,0 +1,40 @@
+<h1>Your Account</h1>
+<div class="detailsList" *ngIf="account">
+  <label>Account Number : {{account.accountNumber}}</label>
+  <br />
+  <br />
+  <label>Balance : {{account.balance}}€</label>
+  <br />
+  <br />
+  <div *ngIf="isSaving">
+    <label>minimumAmount : {{accountTransit.minimumAmount}}€</label>
+    <br />
+    <br />
+    <label>maximumAmount : {{accountTransit.maximumAmount}}€</label>
+    <br />
+    <br />
+    <label>interestRate : {{accountTransit.interestRate}}%</label>
+    <br />
+    <br />
+    <label>MaximumDate : {{accountTransit.maximumDate | date : "dd.MM.yyyy"}}</label>
+    <br />
+    <br />
+  </div>
+  <div *ngIf="isDeposit">
+    <label>freeOverdraft : {{accountTransit2.freeOverdraft}}€</label>
+    <br />
+    <br />
+    <label>autorizedOverdraft : {{accountTransit2.autorizedOverdraft}}€</label>
+    <br />
+    <br />
+    <label>overdraftChargeRate : {{accountTransit2.overdraftChargeRate}}%</label>
+    <br />
+    <br />
+    <label>creationDate : {{accountTransit2.creationDate | date : "dd.MM.yyyy"}}</label>
+    <br />
+    <br />
+  </div>
+  <input type="button" value="Account History">
+  <br />
+  <input type="button" value="I lost my credit card">
+</div>
