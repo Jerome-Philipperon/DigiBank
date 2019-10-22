@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { CurrentUserService } from '../current-user.service';
+import Client from '../Models/client';
 
 @Component({
   selector: 'app-informations',
@@ -7,9 +10,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InformationsComponent implements OnInit {
 
-  constructor() { }
+ @Input() myClient:Client;
+
+  constructor(private currentUser : CurrentUserService) { }
 
   ngOnInit() {
+    this.myClient = this.currentUser.getCurrentUser();
   }
 
 }
